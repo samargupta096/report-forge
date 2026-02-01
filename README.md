@@ -1,5 +1,7 @@
 # ReportForge
 
+![Visitors](https://komarev.com/ghpvc/?username=Samarpitgupta&repo=report-forge&label=Visitors&color=0e75b6&style=flat)
+
 A comprehensive, enterprise-grade **Report Dashboard Application** built with modern web technologies. This platform provides powerful data visualization, report generation, form building, and administrative capabilities—all wrapped in a beautiful, responsive UI.
 
 ![Dashboard Home](docs/screenshots/dashboard_home.png)
