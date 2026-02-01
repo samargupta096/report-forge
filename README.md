@@ -224,13 +224,6 @@ npm run preview
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## 📄 License
-
-This project is private. Please contact the repository owner for licensing information.
-
----
 
 ## 🙏 Acknowledgments
 
