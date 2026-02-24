@@ -1,0 +1,17 @@
+{
+  "kpis": [
+    { "label": "Total Sales", "value": "₹5.1M", "category": "Sales" },
+    { "label": "Products Sold", "value": "18,120", "category": "Inventory" },
+    { "label": "Active Stores", "value": "12", "category": "Operations" },
+    { "label": "Current Promotions", "value": "4", "category": "Marketing" }
+  ],
+  "charts": [
+    { "title": "Sales by Category", "type": "Bar Chart" },
+    { "title": "Monthly Store Traffic", "type": "Line Chart" },
+    { "title": "Store Activity Heatmap", "type": "Heat Map", "description": "In-store footfall heatmap (sample)" },
+    { "title": "Product Price Candles", "type": "Candle Stick", "description": "Sample candle chart for retail pricing" },
+    { "title": "Sales Distribution", "type": "Violin Chart", "description": "Sample violin plot" },
+    { "title": "Statewise Store presence", "type": "State Map", "description": "Highlighting states with active stores" },
+    { "title": "City Sales Coverage", "type": "City Map", "description": "Sales volumes by city" }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kpis": [
+    { "label": "Uptime", "value": "99.99%", "category": "Health" },
+    { "label": "Open Incidents", "value": "12", "category": "Support" },
+    { "label": "Avg Resolution", "value": "2.1 Hrs", "category": "Support" },
+    { "label": "Active Users", "value": "12,450", "category": "Usage" }
+  ],
+  "charts": [
+    { "title": "System Uptime", "type": "Line Chart" },
+    { "title": "Incident Types", "type": "Bar Chart" },
+    { "title": "Server Load Distribution", "type": "Heat Map" },
+    { "title": "Resource Allocation", "type": "Treemap" },
+    { "title": "Data Center Flow", "type": "Sankey Chart" },
+    { "title": "Server Locations", "type": "State Map", "description": "Active servers across regions" }
+  ]
+}

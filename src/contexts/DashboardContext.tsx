@@ -34,11 +34,11 @@ import React, { createContext, useContext, useState } from "react";
  * @property {string[]} widgets - Array of widget identifiers included in dashboard
  */
 export type Dashboard = {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
-  charts: string[];
-  widgets: string[];
+  charts?: string[];
+  widgets?: string[];
 };
 
 /**
@@ -139,8 +139,19 @@ const DEMO_DASHBOARDS: Dashboard[] = [
  * }
  */
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
-  // Initialize state with demo data
   const [dashboards, setDashboards] = useState<Dashboard[]>(DEMO_DASHBOARDS);
+
+  React.useEffect(() => {
+    fetch('/data/dashboards.json')
+      .then(res => res.json())
+      .then(data => {
+        // Map string id to a simple number or keep it as is if type allowed
+        // But since Dashboard type expects id: number, let's cast or update type
+        // Wait, better to also update the type or just assign id
+        setDashboards(data);
+      })
+      .catch(err => console.error("Failed to fetch dashboards:", err));
+  }, []);
 
   /**
    * Context value object

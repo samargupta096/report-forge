@@ -15,42 +15,7 @@ import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
 // import { useToast } from "@/hooks/use-toast";
 
-const DASHBOARD_KPIS: Record<string, { label: string; value: string | number; category?: string }[]> = {
-  "Executive Overview": [
-    { label: "Total Revenue", value: "₹9.3M", category: "A" },
-    { label: "YTD Growth", value: "7.6%", category: "B" },
-    { label: "Active Clients", value: "421", category: "C" },
-    { label: "Churn Rate", value: "1.2%", category: "D" },
-  ],
-  "Retail Performance": [
-    { label: "Total Sales", value: "₹5.1M", category: "A" },
-    { label: "Products Sold", value: "18,120", category: "B" },
-    { label: "Stores", value: "12", category: "C" },
-    { label: "Active Promotions", value: "4", category: "D" },
-  ],
-};
-
-const DASHBOARD_CHARTS: Record<string, { title: string; type: string; description?: string }[]> = {
-  "Executive Overview": [
-    { title: "Monthly Revenue Trend", type: "Line Chart" },
-    { title: "Revenue by Region", type: "Bar Chart" },
-    { title: "Profit Distribution", type: "Heat Map", description: "Heat map showing profits by region and month" },
-    { title: "Revenue Split", type: "Pie Chart" },
-    { title: "Monthly Attendance", type: "Calendar Heat Map", description: "Sample calendar heatmap" },
-    { title: "Market Distributions", type: "Violin Chart", description: "Demo violin plot chart" },
-    { title: "Flow Dynamics", type: "Sankey Chart", description: "Simple Sankey flow demo" },
-    { title: "Candlestick Movements", type: "Candle Stick", description: "Sample financial OHLC chart" }, // Existing for demo
-  ],
-  "Retail Performance": [
-    { title: "Sales by Category", type: "Bar Chart" },
-    { title: "Monthly Store Traffic", type: "Line Chart" },
-    { title: "Store Activity Heatmap", type: "Heat Map", description: "In-store footfall heatmap (sample)" },
-    { title: "Product Price Candles", type: "Candle Stick", description: "Sample candle chart for retail pricing" }, // Existing for demo
-    { title: "Attendance Pattern", type: "Calendar Heat Map", description: "Demo calendar heatmap" },
-    { title: "Sales Distribution", type: "Violin Chart", description: "Sample violin plot" },
-    { title: "Supply Routes", type: "Sankey Chart", description: "Sample Sankey chart" }
-  ],
-};
+// KPIs and Charts are now fetched dynamically from JSON files
 
 const SAMPLE_REPORTS = [
   { id: 1, name: "Q2 Financials", folder: "Finance", editable: true },
@@ -77,11 +42,37 @@ export default function DashboardHome() {
   const [chartKey, setChartKey] = React.useState(0);
 
   // KPIs customized per user
-  const baseKpis = DASHBOARD_KPIS[selectedDashboard] ?? [];
+  const [baseKpis, setBaseKpis] = React.useState<any[]>([]);
+  const [baseCharts, setBaseCharts] = React.useState<any[]>([]);
+  const [loadingConfig, setLoadingConfig] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!selectedDashboard) return;
+    setLoadingConfig(true);
+    // Try to match the exact ID from dashbaords context, fallback to slugified name
+    const dashObj = dashboards.find(d => d.name === selectedDashboard);
+    const slug = dashObj?.id || selectedDashboard.toLowerCase().replace(/\s+/g, '-');
+    
+    fetch(`/data/${slug}.json`)
+      .then(res => res.json())
+      .then(data => {
+        setBaseKpis(data.kpis || []);
+        setBaseCharts(data.charts || []);
+        setLoadingConfig(false);
+      })
+      .catch(err => {
+         console.error("Failed to load dashboard config", err);
+         setBaseKpis([]);
+         setBaseCharts([]);
+         setLoadingConfig(false);
+      });
+  }, [selectedDashboard, dashboards]);
+
+  // KPIs customized per user
   const [kpis, setKpis] = React.useState(() => getKpiOrder(baseKpis));
   React.useEffect(() => {
     setKpis(getKpiOrder(baseKpis));
-  }, [selectedDashboard, baseKpis]);
+  }, [baseKpis]);
 
   // Drilldown modal state
   const [drillData, setDrillData] = React.useState<any | null>(null);
@@ -129,7 +120,7 @@ export default function DashboardHome() {
   };
 
   // Advanced Filter States
-  const baseCharts = DASHBOARD_CHARTS[selectedDashboard] ?? [];
+  const dashboardCharts = baseCharts; // Using dynamic charts
 
   // Categories/KPIs for filter options (no duplicates)
   const categories = Array.from(new Set(baseKpis.map(k => k.category)));
@@ -176,8 +167,8 @@ export default function DashboardHome() {
       ? kpiCategoryFilter
       : kpiCategoryFilter.filter(k => selectedKpis.includes(k.label));
 
-  // For charts, could apply similar filter logic if you want
-  const dashboardCharts = baseCharts; // not filtered for simplicity
+  // For charts, not filtered for simplicity
+  // The 'dashboardCharts' is just baseCharts, defined above
 
   const shownKpis = !activeFilter
     ? kpis

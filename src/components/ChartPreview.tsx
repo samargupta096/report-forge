@@ -10,6 +10,8 @@ import D3AdvancedChart from "./charts/D3AdvancedChart";
 import D3PieChart from "./charts/D3PieChart";
 import D3BarChart from "./charts/D3BarChart";
 import D3IndiaMapChart from "./charts/D3IndiaMapChart";
+import StateMapChart from "./charts/StateMapChart";
+import CityMapChart from "./charts/CityMapChart";
 import CandleStickChartPreview from "./charts/CandleStickChartPreview";
 import CalendarHeatMapChartPreview from "./charts/CalendarHeatMapChartPreview";
 import D3ViolinChartPreview from "./charts/D3ViolinChartPreview";
@@ -76,8 +78,14 @@ export default function ChartPreview({ type, onDataPointClick, topRight, chartId
   if (type === "D3 Bar Chart") {
     return <D3BarChart />;
   }
-  if (type === "D3 India Map") {
+  if (type === "D3 India Map" || type === "India Map") {
     return <D3IndiaMapChart />;
+  }
+  if (type === "State Map") {
+    return <StateMapChart />;
+  }
+  if (type === "City Map") {
+    return <CityMapChart />;
   }
   if (type === "Candle Stick") {
     return <CandleStickChartPreview />;

@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    { "label": "Total Employees", "value": "1,245", "category": "Headcount" },
+    { "label": "Open Positions", "value": "34", "category": "Recruitment" },
+    { "label": "Turnover Rate", "value": "4.1%", "category": "Retention" },
+    { "label": "Avg Tenure", "value": "3.2 Yrs", "category": "Retention" }
+  ],
+  "charts": [
+    { "title": "Department Headcount", "type": "Donut Chart" },
+    { "title": "Hiring vs Attrition", "type": "Combo Chart" },
+    { "title": "Attendance Pattern", "type": "Calendar Heat Map", "description": "Daily employee attendance" },
+    { "title": "Salary Distribution", "type": "Violin Chart" },
+    { "title": "Employee Locations", "type": "India Map", "description": "Workforce spread across India" }
+  ]
+}
