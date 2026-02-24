@@ -26,31 +26,36 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import FeedbackPage from "./pages/FeedbackPage";
-import QRFeaturesPage from "./pages/QRFeaturesPage";
-import DashboardLayout from "./layouts/DashboardLayout";
-import DashboardHome from "./pages/DashboardHome";
-import ReportsPage from "./pages/ReportsPage";
-import DataSourcesPage from "./pages/DataSourcesPage";
-import SchedulesPage from "./pages/SchedulesPage";
-import ProfilePage from "./pages/ProfilePage";
-import RoleMgmtPage from "./pages/RoleMgmtPage";
-import HistoryPage from "./pages/HistoryPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import AuditLogsPage from "./pages/AuditLogsPage";
-import SharePage from "./pages/SharePage";
-import UsersPage from "./pages/UsersPage";
+import { Suspense, lazy } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import PageLoader from "@/components/PageLoader";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import AdminDashboardMgmt from "./pages/AdminDashboardMgmt";
-import { DashboardProvider } from "./contexts/DashboardContext";
-import FormBuilderPage from "./pages/FormBuilderPage";
-import DynamicFormPage from "./pages/DynamicFormPage";
-import DocumentPage from "./pages/DocumentPage";
-import McpServerPage from "./pages/McpServerPage";
+import { DashboardProvider } from "@/contexts/DashboardContext";
+
+// Lazy-loaded routes for performance code-splitting
+const Index = lazy(() => import("./pages/Index"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const SignInPage = lazy(() => import("./pages/SignInPage"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const FeedbackPage = lazy(() => import("./pages/FeedbackPage"));
+const QRFeaturesPage = lazy(() => import("./pages/QRFeaturesPage"));
+const DashboardLayout = lazy(() => import("./layouts/DashboardLayout"));
+const DashboardHome = lazy(() => import("./pages/DashboardHome"));
+const ReportsPage = lazy(() => import("./pages/ReportsPage"));
+const DataSourcesPage = lazy(() => import("./pages/DataSourcesPage"));
+const SchedulesPage = lazy(() => import("./pages/SchedulesPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const RoleMgmtPage = lazy(() => import("./pages/RoleMgmtPage"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage"));
+const NotificationsPage = lazy(() => import("./pages/NotificationsPage"));
+const AuditLogsPage = lazy(() => import("./pages/AuditLogsPage"));
+const SharePage = lazy(() => import("./pages/SharePage"));
+const UsersPage = lazy(() => import("./pages/UsersPage"));
+const AdminDashboardMgmt = lazy(() => import("./pages/AdminDashboardMgmt"));
+const FormBuilderPage = lazy(() => import("./pages/FormBuilderPage"));
+const DynamicFormPage = lazy(() => import("./pages/DynamicFormPage"));
+const DocumentPage = lazy(() => import("./pages/DocumentPage"));
+const McpServerPage = lazy(() => import("./pages/McpServerPage"));
 
 /**
  * React Query Client Configuration
@@ -82,155 +87,169 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter basename={import.meta.env.BASE_URL}>
-            <Routes>
-              {/* Dashboard Routes - Protected by DashboardLayout */}
-              <Route
-                path="/"
-                element={
-                  <DashboardLayout>
-                    <DashboardHome />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <DashboardLayout>
-                    <AdminDashboardMgmt />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/reports"
-                element={
-                  <DashboardLayout>
-                    <ReportsPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/data-sources"
-                element={
-                  <DashboardLayout>
-                    <DataSourcesPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/schedules"
-                element={
-                  <DashboardLayout>
-                    <SchedulesPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <DashboardLayout>
-                    <ProfilePage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/roles"
-                element={
-                  <DashboardLayout>
-                    <RoleMgmtPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/users"
-                element={
-                  <DashboardLayout>
-                    <UsersPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/history"
-                element={
-                  <DashboardLayout>
-                    <HistoryPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/notifications"
-                element={
-                  <DashboardLayout>
-                    <NotificationsPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/audit-logs"
-                element={
-                  <DashboardLayout>
-                    <AuditLogsPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/share"
-                element={
-                  <DashboardLayout>
-                    <SharePage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/feedback"
-                element={
-                  <DashboardLayout>
-                    <FeedbackPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/qr-features"
-                element={
-                  <DashboardLayout>
-                    <QRFeaturesPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/form-builder"
-                element={
-                  <DashboardLayout>
-                    <FormBuilderPage />
-                  </DashboardLayout>
-                }
-              />
-              {/* Dynamic form route - no layout wrapper for embedded use */}
-              <Route
-                path="/form/:formId"
-                element={<DynamicFormPage />}
-              />
-              <Route
-                path="/document"
-                element={
-                  <DashboardLayout>
-                    <DocumentPage />
-                  </DashboardLayout>
-                }
-              />
-              <Route
-                path="/mcp-server"
-                element={
-                  <DashboardLayout>
-                    <McpServerPage />
-                  </DashboardLayout>
-                }
-              />
-              {/* Authentication Pages - Standalone without dashboard layout */}
-              <Route path="/signin" element={<SignInPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              {/* 404 Handler */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <ErrorBoundary>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  {/* Dashboard Routes - Protected by DashboardLayout */}
+                  <Route
+                    path="/"
+                    element={
+                      <DashboardLayout>
+                        <DashboardHome />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/admin"
+                    element={
+                      <DashboardLayout>
+                        <AdminDashboardMgmt />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/reports"
+                    element={
+                      <DashboardLayout>
+                        <ReportsPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/data-sources"
+                    element={
+                      <DashboardLayout>
+                        <DataSourcesPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/schedules"
+                    element={
+                      <DashboardLayout>
+                        <SchedulesPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <DashboardLayout>
+                        <ProfilePage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/roles"
+                    element={
+                      <DashboardLayout>
+                        <RoleMgmtPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/users"
+                    element={
+                      <DashboardLayout>
+                        <UsersPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/history"
+                    element={
+                      <DashboardLayout>
+                        <HistoryPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/notifications"
+                    element={
+                      <DashboardLayout>
+                        <NotificationsPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/audit-logs"
+                    element={
+                      <DashboardLayout>
+                        <AuditLogsPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/share/:id"
+                    element={
+                      <DashboardLayout>
+                        <SharePage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/feedback"
+                    element={
+                      <DashboardLayout>
+                        <FeedbackPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/qr-features"
+                    element={
+                      <DashboardLayout>
+                        <QRFeaturesPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/form-builder"
+                    element={
+                      <DashboardLayout>
+                        <FormBuilderPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  {/* Dynamic form route - no layout wrapper for embedded use */}
+                  <Route
+                    path="/form/:formId"
+                    element={<DynamicFormPage />}
+                  />
+                  <Route
+                    path="/document"
+                    element={
+                      <DashboardLayout>
+                        <DocumentPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/mcp-server"
+                    element={
+                      <DashboardLayout>
+                        <McpServerPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/mcp/:serverId"
+                    element={
+                      <DashboardLayout>
+                        <McpServerPage />
+                      </DashboardLayout>
+                    }
+                  />
+                  
+                  {/* Authentication Pages - Standalone without dashboard layout */}
+                  <Route path="/signin" element={<SignInPage />} />
+                  <Route path="/signup" element={<SignUpPage />} />
+                  
+                  {/* 404 Handler */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>
