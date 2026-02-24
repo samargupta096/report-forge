@@ -11,6 +11,9 @@
     { "title": "Server Load Distribution", "type": "Heat Map" },
     { "title": "Resource Allocation", "type": "Treemap" },
     { "title": "Data Center Flow", "type": "Sankey Chart" },
-    { "title": "Server Locations", "type": "State Map", "description": "Active servers across regions" }
+    { "title": "Server Locations", "type": "State Map", "description": "Active servers across regions" },
+    { "title": "Server Workloads", "type": "Stacked Bar Chart" },
+    { "title": "Component Dependencies", "type": "Combo Chart" },
+    { "title": "City Data Centers", "type": "City Map" }
   ]
 }

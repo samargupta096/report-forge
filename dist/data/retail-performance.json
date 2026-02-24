@@ -12,6 +12,9 @@
     { "title": "Product Price Candles", "type": "Candle Stick", "description": "Sample candle chart for retail pricing" },
     { "title": "Sales Distribution", "type": "Violin Chart", "description": "Sample violin plot" },
     { "title": "Statewise Store presence", "type": "State Map", "description": "Highlighting states with active stores" },
-    { "title": "City Sales Coverage", "type": "City Map", "description": "Sales volumes by city" }
+    { "title": "City Sales Coverage", "type": "City Map", "description": "Sales volumes by city" },
+    { "title": "Customer Demographics", "type": "Donut Chart" },
+    { "title": "Inventory Flow", "type": "Sankey Chart" },
+    { "title": "Sales Concentration", "type": "India Map" }
   ]
 }
