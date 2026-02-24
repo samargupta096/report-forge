@@ -11,7 +11,8 @@ import {
   QrCode,
   ClipboardList,
   ServerCog,
-  UserPlus
+  UserPlus,
+  LayoutDashboard
 } from "lucide-react";
 import { useDashboardContext } from "../contexts/DashboardContext";
 import {
@@ -69,7 +70,7 @@ export default function DashboardNav() {
     >
       <SidebarHeader className="flex h-16 items-center justify-center">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <Database className="h-6 w-6 text-primary" />
+          <LayoutDashboard className="h-6 w-6 text-primary" />
           <span className="group-data-[collapsible=icon]:hidden">ReportForge</span>
         </Link>
       </SidebarHeader>

@@ -9,9 +9,6 @@ import ChartExportMenu from "@/components/ChartExportMenu";
 import { ChartPreviewWithExport } from "@/components/ChartPreview";
 import CustomizableKpiList from "@/components/CustomizableKpiList";
 import DrilldownModal from "@/components/DrilldownModal";
-import ReportFolders from "@/components/ReportFolders";
-import VersionModal from "@/components/VersionModal";
-import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
 import AuditTrailModal from "@/components/AuditTrailModal";
 import { useSearchParams } from "react-router-dom";
@@ -20,12 +17,6 @@ import AddChartDialog from "@/components/AddChartDialog";
 // import { useToast } from "@/hooks/use-toast";
 
 // KPIs and Charts are now fetched dynamically from JSON files
-
-const SAMPLE_REPORTS = [
-  { id: 1, name: "Q2 Financials", folder: "Finance", editable: true },
-  { id: 2, name: "Retail Store Stats", folder: "Retail", editable: true },
-  { id: 3, name: "Operations Audit", folder: "Audit", editable: false },
-];
 
 function getKpiOrder(kpis: any[]) {
   // Try localStorage for order (simulate user selected order)
@@ -113,10 +104,6 @@ export default function DashboardHome() {
   // Drilldown modal state
   const [drillData, setDrillData] = React.useState<any | null>(null);
 
-  // Version modal/schedule modal
-  const [showVersion, setShowVersion] = React.useState(false);
-  const [currReport, setCurrReport] = React.useState("");
-  const [showSchedule, setShowSchedule] = React.useState(false);
   const [showAuditModal, setShowAuditModal] = React.useState(false);
 
   // Audit Trail (simulate localStorage log)
@@ -236,7 +223,7 @@ export default function DashboardHome() {
               )}
               {dashboardOptions.map(option => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  Dashboard: {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -361,54 +348,12 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <hr className="my-8" />
-      {/* --- Reports widgets/features --- */}
-      <h3 className="font-bold mb-2 mt-4 text-xl">Report Module (Enterprise Features)</h3>
-      <div className="flex flex-col md:flex-row gap-5 md:items-start">
-        <div className="basis-1/2">
-          <ReportFolders />
-          <h5 className="font-semibold mb-2">Sample Reports</h5>
-          <ul className="mb-4 space-y-2">
-            {SAMPLE_REPORTS.map(r => (
-              <li key={r.id} className="flex gap-2 items-center justify-between bg-white rounded border p-2">
-                <span>{r.name} <span className="text-xs text-muted-foreground">({r.folder})</span></span>
-                <div className="flex gap-1">
-                  <button
-                    className="text-xs bg-muted rounded border px-2 py-1"
-                    onClick={() => {
-                      setCurrReport(r.name);
-                      setShowVersion(true);
-                      addAudit("Viewed Report Version", r.name);
-                    }}
-                  >Version</button>
-                  <button
-                    className="text-xs bg-muted rounded border px-2 py-1"
-                    onClick={() => {
-                      setCurrReport(r.name);
-                      setShowSchedule(true);
-                      addAudit("Opened Schedule", r.name);
-                    }}
-                  >Schedule</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
       
       {/* Audit Trail Modal */}
       <AuditTrailModal 
         open={showAuditModal} 
         onOpenChange={setShowAuditModal} 
         audits={audits}
-      />
-      {/* Version/schedule modals */}
-      <VersionModal open={showVersion} onClose={() => setShowVersion(false)} reportName={currReport} />
-      <ScheduleReportDialog
-        open={showSchedule}
-        onClose={() => setShowSchedule(false)}
-        onSchedule={sched => addAudit("Scheduled Report", `${sched.reportName} (${sched.frequency} at ${sched.at})`)}
-        reportName={currReport}
       />
       {/* KPI Drilldown Modal */}
       <DrilldownModal

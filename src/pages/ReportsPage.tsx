@@ -14,6 +14,15 @@ import {
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import ReportFolders from "@/components/ReportFolders";
+import VersionModal from "@/components/VersionModal";
+import ScheduleReportDialog from "@/components/ScheduleReportDialog";
+
+const SAMPLE_REPORTS = [
+  { id: 1, name: "Q2 Financials", folder: "Finance", editable: true },
+  { id: 2, name: "Retail Store Stats", folder: "Retail", editable: true },
+  { id: 3, name: "Operations Audit", folder: "Audit", editable: false },
+];
 
 type Template = {
   id: number;
@@ -123,6 +132,26 @@ export default function ReportsPage() {
     console.log("Reset report filter");
   };
 
+  // Version modal/schedule modal
+  const [showVersion, setShowVersion] = React.useState(false);
+  const [currReport, setCurrReport] = React.useState("");
+  const [showSchedule, setShowSchedule] = React.useState(false);
+
+  // function to log to localStorage (copied from dashboard)
+  function addAudit(action: string, item: string) {
+    const logs = localStorage.getItem("auditTrail");
+    const audits = logs ? JSON.parse(logs) : [];
+    const n = {
+      id: Date.now(),
+      user: "User",
+      action,
+      item,
+      date: new Date().toLocaleString(),
+    };
+    const upd = [n, ...audits].slice(0, 50);
+    localStorage.setItem("auditTrail", JSON.stringify(upd));
+  }
+
   // --- FILTER and COLUMNS logic for the table ---
   // Filter logic
   const [filterDropdownOpen, setFilterDropdownOpen] = React.useState(false);
@@ -179,6 +208,50 @@ export default function ReportsPage() {
         <KpiWidget label="Conversion Rate" value="3.2%" />
         <KpiWidget label="Churn Rate" value="0.8%" />
       </div>
+
+      {/* --- Existing Dashboard Report elements moved over --- */}
+      <h3 className="font-bold mb-2 mt-4 text-xl">Report Module (Enterprise Features)</h3>
+      <div className="flex flex-col md:flex-row gap-5 md:items-start mb-8">
+        <div className="basis-1/2">
+          <ReportFolders />
+          <h5 className="font-semibold mb-2 mt-4">Sample Reports</h5>
+          <ul className="space-y-2">
+            {SAMPLE_REPORTS.map(r => (
+              <li key={r.id} className="flex gap-2 items-center justify-between bg-white/70 dark:bg-black/50 backdrop-blur rounded border p-2">
+                <span>{r.name} <span className="text-xs text-muted-foreground">({r.folder})</span></span>
+                <div className="flex gap-1">
+                  <button
+                    className="text-xs bg-muted rounded border px-2 py-1"
+                    onClick={() => {
+                      setCurrReport(r.name);
+                      setShowVersion(true);
+                      addAudit("Viewed Report Version", r.name);
+                    }}
+                  >Version</button>
+                  <button
+                    className="text-xs bg-muted rounded border px-2 py-1"
+                    onClick={() => {
+                      setCurrReport(r.name);
+                      setShowSchedule(true);
+                      addAudit("Opened Schedule", r.name);
+                    }}
+                  >Schedule</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      
+      {/* Version/schedule modals */}
+      <VersionModal open={showVersion} onClose={() => setShowVersion(false)} reportName={currReport} />
+      <ScheduleReportDialog
+        open={showSchedule}
+        onClose={() => setShowSchedule(false)}
+        onSchedule={sched => addAudit("Scheduled Report", `${sched.reportName} (${sched.frequency} at ${sched.at})`)}
+        reportName={currReport}
+      />
+      <hr className="my-8" />
 
       {/* Section Title & New Template */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
@@ -264,23 +337,6 @@ export default function ReportsPage() {
           onDelete={handleDelete}
           visibleColumns={visibleColumns}
         />
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Template Chart Previews</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredTemplates.map((template) => (
-            <div key={template.id} className="rounded border bg-white/70 dark:bg-black/50 shadow-sm p-3 flex flex-col min-w-0 backdrop-blur">
-              <div className="mb-2 font-medium text-primary truncate">{template.name}</div>
-              <div className="mb-1 text-xs text-muted-foreground truncate">
-                {template.type}
-              </div>
-              <ChartPreview type={template.type} />
-              {template.description && (
-                <div className="mt-2 text-xs truncate">{template.description}</div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
