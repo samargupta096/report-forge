@@ -10,6 +10,9 @@
     { "title": "Hiring vs Attrition", "type": "Combo Chart" },
     { "title": "Attendance Pattern", "type": "Calendar Heat Map", "description": "Daily employee attendance" },
     { "title": "Salary Distribution", "type": "Violin Chart" },
-    { "title": "Employee Locations", "type": "India Map", "description": "Workforce spread across India" }
+    { "title": "Employee Locations", "type": "India Map", "description": "Workforce spread across India" },
+    { "title": "Employee Distribution by State", "type": "State Map" },
+    { "title": "Skill Matrix", "type": "Bubble Chart" },
+    { "title": "Department Costs", "type": "Treemap" }
   ]
 }

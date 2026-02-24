@@ -13,6 +13,10 @@
     { "title": "Market Distributions", "type": "Violin Chart", "description": "Demo violin plot chart" },
     { "title": "Financial Flow", "type": "Sankey Chart", "description": "Simple Sankey flow demo" },
     { "title": "Stock Movements", "type": "Candle Stick", "description": "Sample financial OHLC chart" },
-    { "title": "Regional Outreach", "type": "India Map", "description": "Reach across India" }
+    { "title": "Regional Outreach", "type": "India Map", "description": "Reach across India" },
+    { "title": "Growth Forecast", "type": "Area Chart" },
+    { "title": "Asset Allocation", "type": "Treemap" },
+    { "title": "Statewise Performance", "type": "State Map" },
+    { "title": "City Operations", "type": "City Map" }
   ]
 }
