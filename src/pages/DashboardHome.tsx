@@ -14,6 +14,8 @@ import VersionModal from "@/components/VersionModal";
 import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
 import { useSearchParams } from "react-router-dom";
+import { Plus } from "lucide-react";
+import AddChartDialog from "@/components/AddChartDialog";
 // import { useToast } from "@/hooks/use-toast";
 
 // KPIs and Charts are now fetched dynamically from JSON files
@@ -56,8 +58,19 @@ export default function DashboardHome() {
   const [baseKpis, setBaseKpis] = React.useState<any[]>([]);
   const [baseCharts, setBaseCharts] = React.useState<any[]>([]);
   const [loadingConfig, setLoadingConfig] = React.useState(false);
+  
+  // Custom added charts state
+  const [customCharts, setCustomCharts] = React.useState<{ title: string; type: string; description?: string }[]>([]);
+  const [showAddChart, setShowAddChart] = React.useState(false);
 
   React.useEffect(() => {
+    // Load persisted custom charts per dashboard
+    const stored = localStorage.getItem(`customCharts_${selectedDashboard}`);
+    if (stored) {
+       try { setCustomCharts(JSON.parse(stored)); } catch { setCustomCharts([]); }
+    } else {
+       setCustomCharts([]);
+    }
     if (!selectedDashboard) return;
     setLoadingConfig(true);
     // Try to match the exact ID from dashbaords context, fallback to slugified name
@@ -131,8 +144,8 @@ export default function DashboardHome() {
     console.log("Resetting date filter for charts.");
   };
 
-  // Advanced Filter States
-  const dashboardCharts = baseCharts; // Using dynamic charts
+  // Combine original JSON-loaded charts with custom added ones
+  const dashboardCharts = [...baseCharts, ...customCharts];
 
   // Categories/KPIs for filter options (no duplicates)
   const categories = Array.from(new Set(baseKpis.map(k => k.category)));
@@ -261,7 +274,15 @@ export default function DashboardHome() {
       )}
       {/* Charts */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">{selectedDashboard} Visualizations</h3>
+        <div className="flex items-center justify-between mb-4 mt-2">
+          <h3 className="text-lg font-semibold">{selectedDashboard} Visualizations</h3>
+          <button
+            onClick={() => setShowAddChart(true)}
+            className="flex items-center gap-1 bg-primary text-primary-foreground text-sm px-3 py-1.5 rounded hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Add Widget
+          </button>
+        </div>
         <div
           className="
             flex flex-wrap gap-4
@@ -361,6 +382,16 @@ export default function DashboardHome() {
         onClose={() => setDrillData(null)}
       />
 
+      <AddChartDialog 
+        open={showAddChart} 
+        onClose={() => setShowAddChart(false)}
+        onAdd={(newChart) => {
+          const updated = [...customCharts, newChart];
+          setCustomCharts(updated);
+          localStorage.setItem(`customCharts_${selectedDashboard}`, JSON.stringify(updated));
+          addAudit("Added Widget", newChart.title);
+        }}
+      />
       {/* User Creation Section removed and moved to /users */}
     </section>
   );

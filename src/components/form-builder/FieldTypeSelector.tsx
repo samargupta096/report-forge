@@ -86,19 +86,19 @@ export default function FieldTypeSelector({ onAddField, readOnly }: FieldTypeSel
             variant="outline"
             size="sm"
             onClick={() => onAddField(type)}
-            className="flex flex-col h-auto p-3 text-left hover:bg-gray-50 transition-colors duration-200"
+            className="flex flex-col items-start h-auto w-full p-3 text-left hover:bg-gray-50 transition-colors duration-200 whitespace-normal"
             disabled={readOnly}
             title={description}
             aria-label={`Add ${label} field`}
           >
             {/* Icon and Label Row */}
-            <div className="flex items-center gap-2 mb-1">
-              <Icon size={16} className="text-gray-600" />
+            <div className="flex items-center gap-2 mb-1 w-full">
+              <Icon size={16} className="text-gray-600 shrink-0" />
               <span className="text-xs font-medium">{label}</span>
             </div>
             
             {/* Description */}
-            <span className="text-xs text-gray-500 text-left leading-tight">
+            <span className="text-xs text-gray-500 text-left leading-tight line-clamp-2">
               {description}
             </span>
           </Button>
