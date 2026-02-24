@@ -13,6 +13,7 @@ import ReportFolders from "@/components/ReportFolders";
 import VersionModal from "@/components/VersionModal";
 import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
+import { useSearchParams } from "react-router-dom";
 // import { useToast } from "@/hooks/use-toast";
 
 // KPIs and Charts are now fetched dynamically from JSON files
@@ -34,9 +35,19 @@ function getKpiOrder(kpis: any[]) {
 export default function DashboardHome() {
   const { dashboards } = useDashboardContext();
   const dashboardOptions = dashboards.map(d => ({ label: d.name, value: d.name }));
-  const [selectedDashboard, setSelectedDashboard] = React.useState<string>(
-    dashboardOptions[0]?.value ?? ""
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Default to URL param, then first option
+  const urlDashboard = searchParams.get("dashboard");
+  const [selectedDashboard, setSelectedDashboard] = React.useState<string>("");
+
+  React.useEffect(() => {
+    if (urlDashboard && dashboardOptions.find(d => d.value === urlDashboard)) {
+      setSelectedDashboard(urlDashboard);
+    } else if (dashboardOptions.length > 0 && !selectedDashboard) {
+       setSelectedDashboard(dashboardOptions[0].value);
+    }
+  }, [urlDashboard, dashboardOptions, selectedDashboard]);
   const [activeFilter, setActiveFilter] = React.useState<{ label: string; value: number } | null>(null);
   const [date, setDate] = React.useState<DateRange | undefined>();
   const [chartKey, setChartKey] = React.useState(0);
@@ -105,6 +116,7 @@ export default function DashboardHome() {
 
   const handleDashboardChange = (value: string) => {
     setSelectedDashboard(value);
+    setSearchParams({ dashboard: value });
     setActiveFilter(null); // reset filter when switching dashboard
   };
 

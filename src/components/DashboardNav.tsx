@@ -13,6 +13,7 @@ import {
   ServerCog,
   UserPlus
 } from "lucide-react";
+import { useDashboardContext } from "../contexts/DashboardContext";
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +22,9 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarSeparator,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar";
 import {
   Tooltip,
@@ -48,7 +52,10 @@ export const navItems = [
 ];
 
 export default function DashboardNav() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const { dashboards } = useDashboardContext();
+  const currentParams = new URLSearchParams(search);
+  const currentDashboard = currentParams.get("dashboard");
   return (
     <Sidebar
       className="
@@ -75,13 +82,17 @@ export default function DashboardNav() {
               item.icon === "server-cog"
                 ? ServerCog
                 : item.icon;
+            
+            // For the main dashboard icon, only make active if there's no ?dashboard= parameter
+            const isActive = pathname === item.to && (item.to !== "/" || !currentDashboard);
+
             return (
               <SidebarMenuItem key={item.to}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <SidebarMenuButton
                       asChild
-                      isActive={pathname === item.to}
+                      isActive={isActive}
                       tooltip={{
                         children: item.label,
                         side: "right",
@@ -102,6 +113,44 @@ export default function DashboardNav() {
             );
           })}
         </SidebarMenu>
+        
+        {/* Sample Dashboards Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Sample Dashboards</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {dashboards.map((dash) => {
+                const isActive = pathname === "/" && currentDashboard === dash.name;
+                return (
+                  <SidebarMenuItem key={dash.id}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={isActive}
+                          tooltip={{
+                            children: dash.name,
+                            side: "right",
+                            align: "center",
+                          }}
+                        >
+                          <Link to={`/?dashboard=${encodeURIComponent(dash.name)}`}>
+                            <ChartBar size={20} />
+                            <span>{dash.name}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-xs">
+                        {dash.description}
+                      </TooltipContent>
+                    </Tooltip>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
       </SidebarContent>
     </Sidebar>
   );
