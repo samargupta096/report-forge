@@ -43,6 +43,7 @@ import HistoryPage from "./pages/HistoryPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import AuditLogsPage from "./pages/AuditLogsPage";
 import SharePage from "./pages/SharePage";
+import UsersPage from "./pages/UsersPage";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AdminDashboardMgmt from "./pages/AdminDashboardMgmt";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -136,6 +137,14 @@ const App = () => (
                 element={
                   <DashboardLayout>
                     <RoleMgmtPage />
+                  </DashboardLayout>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <DashboardLayout>
+                    <UsersPage />
                   </DashboardLayout>
                 }
               />

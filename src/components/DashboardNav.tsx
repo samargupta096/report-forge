@@ -11,6 +11,7 @@ import {
   QrCode,
   ClipboardList,
   ServerCog,
+  UserPlus
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,6 +42,7 @@ export const navItems = [
   { to: "/document", label: "Document", icon: FileText, description: "E-sign documents via DocuSign" },
   { to: "/mcp-server", label: "MCP Server", icon: "server-cog", description: "Setup & manage MCP dashboard/report server APIs" },
   { to: "/profile", label: "Profile", icon: Users, description: "Your account profile and preferences" },
+  { to: "/users", label: "Users", icon: UserPlus, description: "Create and manage system users" },
   { to: "/roles", label: "Role Mgmt", icon: Settings, description: "Manage roles and permissions" },
   { to: "/share", label: "Share/Export", icon: FilePlus, description: "Share or export your data" },
 ];
