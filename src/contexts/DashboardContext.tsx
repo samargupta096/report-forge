@@ -142,7 +142,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [dashboards, setDashboards] = useState<Dashboard[]>(DEMO_DASHBOARDS);
 
   React.useEffect(() => {
-    fetch('/data/dashboards.json')
+    fetch(`${import.meta.env.BASE_URL}data/dashboards.json`)
       .then(res => res.json())
       .then(data => {
         // Map string id to a simple number or keep it as is if type allowed

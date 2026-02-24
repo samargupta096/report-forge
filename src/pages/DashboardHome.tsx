@@ -88,7 +88,7 @@ export default function DashboardHome() {
     const dashObj = dashboards.find(d => d.name === selectedDashboard);
     const slug = dashObj?.id || selectedDashboard.toLowerCase().replace(/\s+/g, '-');
     
-    fetch(`/data/${slug}.json`)
+    fetch(`${import.meta.env.BASE_URL}data/${slug}.json`)
       .then(res => res.json())
       .then(data => {
         setBaseKpis(data.kpis || []);
