@@ -1,0 +1,18 @@
+{
+  "kpis": [
+    { "label": "Total Revenue", "value": "₹9.3M", "category": "Finance" },
+    { "label": "YTD Growth", "value": "7.6%", "category": "Finance" },
+    { "label": "Active Clients", "value": "421", "category": "Sales" },
+    { "label": "Churn Rate", "value": "1.2%", "category": "Retention" }
+  ],
+  "charts": [
+    { "title": "Monthly Revenue Trend", "type": "Line Chart" },
+    { "title": "Revenue by Region", "type": "Bar Chart" },
+    { "title": "Profit Distribution", "type": "Heat Map", "description": "Heat map showing profits by region and month" },
+    { "title": "Revenue Split", "type": "Pie Chart" },
+    { "title": "Market Distributions", "type": "Violin Chart", "description": "Demo violin plot chart" },
+    { "title": "Financial Flow", "type": "Sankey Chart", "description": "Simple Sankey flow demo" },
+    { "title": "Stock Movements", "type": "Candle Stick", "description": "Sample financial OHLC chart" },
+    { "title": "Regional Outreach", "type": "India Map", "description": "Reach across India" }
+  ]
+}

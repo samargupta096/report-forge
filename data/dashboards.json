@@ -1,0 +1,22 @@
+[
+  {
+    "id": "executive-overview",
+    "name": "Executive Overview",
+    "description": "High-level metrics and financial summaries."
+  },
+  {
+    "id": "retail-performance",
+    "name": "Retail Performance",
+    "description": "Store level metrics and product performance."
+  },
+  {
+    "id": "hr-analytics",
+    "name": "HR Analytics",
+    "description": "Employee performance, attendance, and demographics."
+  },
+  {
+    "id": "it-operations",
+    "name": "IT Operations",
+    "description": "System health, incident resolution, and geography."
+  }
+]
