@@ -14,7 +14,7 @@ import VersionModal from "@/components/VersionModal";
 import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
 import { useSearchParams } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import AddChartDialog from "@/components/AddChartDialog";
 // import { useToast } from "@/hooks/use-toast";
 
@@ -71,6 +71,17 @@ export default function DashboardHome() {
     } else {
        setCustomCharts([]);
     }
+  }, [selectedDashboard]);
+
+  const handleRemoveCustomChart = (index: number) => {
+    const chartToRemove = customCharts[index];
+    const updated = customCharts.filter((_, idx) => idx !== index);
+    setCustomCharts(updated);
+    localStorage.setItem(`customCharts_${selectedDashboard}`, JSON.stringify(updated));
+    addAudit("Removed Widget", chartToRemove.title);
+  };
+
+  React.useEffect(() => {
     if (!selectedDashboard) return;
     setLoadingConfig(true);
     // Try to match the exact ID from dashbaords context, fallback to slugified name
@@ -315,7 +326,18 @@ export default function DashboardHome() {
                     <span className="font-medium text-primary">{chart.title}</span>
                     <div className="text-xs text-muted-foreground">{chart.type}</div>
                   </div>
-                  <ChartExportMenu chartType={chart.type} chartTitle={chart.title} chartId={chartId} />
+                  <div className="flex items-center">
+                    <ChartExportMenu chartType={chart.type} chartTitle={chart.title} chartId={chartId} />
+                    {i >= baseCharts.length && (
+                      <button 
+                        onClick={() => handleRemoveCustomChart(i - baseCharts.length)}
+                        className="text-muted-foreground hover:text-destructive p-2 transition-colors rounded-full"
+                        title="Remove Widget"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <ChartPreviewWithExport
                   type={chart.type}
