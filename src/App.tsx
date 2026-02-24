@@ -80,7 +80,7 @@ const App = () => (
           {/* Dual toast system for different notification types */}
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Routes>
               {/* Dashboard Routes - Protected by DashboardLayout */}
               <Route
