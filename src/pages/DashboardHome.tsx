@@ -13,8 +13,9 @@ import ReportFolders from "@/components/ReportFolders";
 import VersionModal from "@/components/VersionModal";
 import ScheduleReportDialog from "@/components/ScheduleReportDialog";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
+import AuditTrailModal from "@/components/AuditTrailModal";
 import { useSearchParams } from "react-router-dom";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, History } from "lucide-react";
 import AddChartDialog from "@/components/AddChartDialog";
 // import { useToast } from "@/hooks/use-toast";
 
@@ -116,6 +117,7 @@ export default function DashboardHome() {
   const [showVersion, setShowVersion] = React.useState(false);
   const [currReport, setCurrReport] = React.useState("");
   const [showSchedule, setShowSchedule] = React.useState(false);
+  const [showAuditModal, setShowAuditModal] = React.useState(false);
 
   // Audit Trail (simulate localStorage log)
   const [audits, setAudits] = React.useState<Audit[]>([]);
@@ -219,9 +221,9 @@ export default function DashboardHome() {
   return (
     <section>
       {/* Remove Role Switcher */}
-      <div className="flex gap-5 items-center flex-wrap mb-2 mt-2">
+      <div className="flex gap-5 items-center justify-between flex-wrap mb-2 mt-2">
         {/* RoleSwitcher removed */}
-        <div className="w-full max-w-xs">
+        <div className="w-full max-w-xs flex gap-2">
           <Select value={selectedDashboard} onValueChange={handleDashboardChange}>
             <SelectTrigger>
               <SelectValue placeholder="Select dashboard" />
@@ -239,6 +241,13 @@ export default function DashboardHome() {
               ))}
             </SelectContent>
           </Select>
+          <button 
+            onClick={() => setShowAuditModal(true)}
+            className="flex items-center justify-center p-2 rounded border bg-white text-muted-foreground hover:text-primary hover:bg-gray-50 transition-colors shadow-sm"
+            title="View Audit Trail"
+          >
+            <History className="w-5 h-5" />
+          </button>
         </div>
       </div>
       <p className="mb-6">
@@ -385,10 +394,14 @@ export default function DashboardHome() {
             ))}
           </ul>
         </div>
-        <div className="basis-1/2">
-          <AuditTrailTable audits={audits} />
-        </div>
       </div>
+      
+      {/* Audit Trail Modal */}
+      <AuditTrailModal 
+        open={showAuditModal} 
+        onOpenChange={setShowAuditModal} 
+        audits={audits}
+      />
       {/* Version/schedule modals */}
       <VersionModal open={showVersion} onClose={() => setShowVersion(false)} reportName={currReport} />
       <ScheduleReportDialog

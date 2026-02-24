@@ -114,7 +114,7 @@ export function ChartPreviewWithExport({
 }: ChartPreviewProps) {
   // Returns chart preview and extra content to use in DashboardHome
   return (
-    <div id={chartId} className="relative w-full h-40">
+    <div id={chartId} className="relative w-full h-full min-h-[160px]">
       {topRight && (
         <div className="absolute top-0 right-0 z-10 mt-1 mr-1">{topRight}</div>
       )}

@@ -13,7 +13,7 @@ const stateData = [
 
 export default function StateMapChart() {
   return (
-    <div className="w-full h-40 sm:h-64 rounded overflow-hidden relative z-0">
+    <div className="w-full h-full min-h-[160px] rounded overflow-hidden relative z-0">
       <MapContainer
         center={[22.5937, 78.9629]}
         zoom={3}

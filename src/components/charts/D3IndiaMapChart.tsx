@@ -58,9 +58,13 @@ export default function D3IndiaMapChart() {
   }, []);
 
   return (
-    <div className="w-full h-40 flex items-center justify-center">
-      <svg ref={ref} width={width} height={height} />
+    <div className="w-full h-full min-h-[140px] flex items-center justify-center overflow-hidden">
+      <svg
+        ref={ref}
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full h-full max-h-[200px]"
+        preserveAspectRatio="xMidYMid meet"
+      />
     </div>
   );
 }
-

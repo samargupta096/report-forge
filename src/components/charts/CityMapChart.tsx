@@ -22,7 +22,7 @@ const cityData = [
 
 export default function CityMapChart() {
   return (
-    <div className="w-full h-40 sm:h-64 rounded overflow-hidden relative z-0">
+    <div className="w-full h-full min-h-[160px] rounded overflow-hidden relative z-0">
       <MapContainer
         center={[17.5937, 76.9629]}
         zoom={4}
