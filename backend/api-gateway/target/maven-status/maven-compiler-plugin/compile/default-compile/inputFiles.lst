@@ -1,0 +1,14 @@
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/config/GatewayConfig.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/DataSourceApi.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/FormsApi.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/AuthApiClient.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/DashboardsApi.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/ReportsApiClient.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/AuthApi.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/config/ApiKeyRequestInterceptor.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/DataSourceApiClient.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/ReportsApi.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/ApiGatewayApplication.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/config/ClientConfiguration.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/DashboardsApiClient.java
+/home/samarpit/Documents/Projects/2026/samargupta096/report-forge/backend/api-gateway/src/main/java/com/reportforge/gateway/api/FormsApiClient.java
