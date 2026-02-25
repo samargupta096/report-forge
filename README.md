@@ -1,5 +1,7 @@
 # 🛠️ ReportForge
 
+![ReportForge Marketing Poster](docs/screenshots/reportforge_poster.png)
+
 ![Visitors](https://komarev.com/ghpvc/?username=Samarpitgupta&repo=report-forge&label=Visitors&color=0e75b6&style=flat)
 
 A comprehensive, enterprise-grade **Report Dashboard Platform** — a full-stack application with a React frontend, Spring Boot microservices, Kafka data pipelines, and one-command Docker deployment.
