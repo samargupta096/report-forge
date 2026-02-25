@@ -1,0 +1,6 @@
+.openapi-generator-ignore
+apis/RoutingApi.ts
+apis/index.ts
+docs/RoutingApi.md
+index.ts
+runtime.ts

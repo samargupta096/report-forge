@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  description: Manages external database connections and acts as a proxy to query
+    remote databases securely.
+  title: Data Source Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8085/api/v1/data-sources
+tags:
+- name: DataSources
+- name: Query
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DataSourceConfig"
+                type: array
+          description: OK
+      security:
+      - bearerAuth: []
+      summary: Get configured data sources
+      tags:
+      - DataSources
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: DataSources
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataSourceRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+      security:
+      - bearerAuth: []
+      summary: Configure a new data source
+      tags:
+      - DataSources
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: DataSources
+  /{id}/query:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/__id__query_post_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  type: object
+                type: array
+          description: Query results
+      security:
+      - bearerAuth: []
+      summary: Execute a query against a remote data source
+      tags:
+      - Query
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Query
+components:
+  schemas:
+    DataSourceRequest:
+      example:
+        password: password
+        name: name
+        type: POSTGRES
+        url: url
+        username: username
+      properties:
+        name:
+          type: string
+        type:
+          enum:
+          - POSTGRES
+          - MYSQL
+          - MONGODB
+          - SQLSERVER
+          - ELASTICSEARCH
+          type: string
+        url:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - name
+      - type
+      - url
+      type: object
+    DataSourceConfig:
+      example:
+        name: name
+        id: 0
+        type: type
+        url: url
+        status: CONNECTED
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          description: Obfuscated or partial URL for display
+          type: string
+        status:
+          enum:
+          - CONNECTED
+          - FAILED
+          - PENDING
+          type: string
+      type: object
+    __id__query_post_request:
+      properties:
+        sql:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

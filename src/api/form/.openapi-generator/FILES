@@ -1,0 +1,13 @@
+.openapi-generator-ignore
+apis/FormsApi.ts
+apis/SubmissionsApi.ts
+apis/index.ts
+docs/FormDefinition.md
+docs/FormRequest.md
+docs/FormsApi.md
+docs/SubmissionsApi.md
+index.ts
+models/FormDefinition.ts
+models/FormRequest.ts
+models/index.ts
+runtime.ts

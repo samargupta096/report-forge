@@ -1,0 +1,17 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/com/reportforge/form/OpenApiGeneratorApplication.java
+src/main/java/com/reportforge/form/RFC3339DateFormat.java
+src/main/java/com/reportforge/form/config/HomeController.java
+src/main/java/com/reportforge/form/config/SpringDocConfiguration.java
+src/main/java/com/reportforge/form/controller/ApiUtil.java
+src/main/java/com/reportforge/form/controller/DefaultApi.java
+src/main/java/com/reportforge/form/controller/DefaultApiController.java
+src/main/java/com/reportforge/form/controller/FormIdApi.java
+src/main/java/com/reportforge/form/controller/FormIdApiController.java
+src/main/java/com/reportforge/form/model/FormDefinition.java
+src/main/java/com/reportforge/form/model/FormRequest.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/com/reportforge/form/OpenApiGeneratorApplicationTests.java

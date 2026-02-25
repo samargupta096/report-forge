@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: Dashboard Service
+  version: 1.0.0
+  description: Manages dashboard layouts, configured widgets, KPI tracking, and user preferences stored in Elasticsearch.
+servers:
+  - url: http://localhost:8082/api/v1/dashboards
+tags:
+  - name: Dashboards
+  - name: Widgets
+paths:
+  /:
+    get:
+      tags:
+        - Dashboards
+      summary: Get all dashboards for user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+    post:
+      tags:
+        - Dashboards
+      summary: Create a new dashboard
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DashboardRequest"
+      responses:
+        "201":
+          description: Created
+  /{id}:
+    get:
+      tags:
+        - Dashboards
+      summary: Get a specific dashboard config
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+        "404":
+          description: Not Found
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    DashboardRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    Dashboard:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        ownerId:
+          type: integer
+        layout:
+          type: object
+          description: JSON representing the UI layout structure
+        widgets:
+          type: array
+          items:
+            type: object
+            description: Array of configured widgets

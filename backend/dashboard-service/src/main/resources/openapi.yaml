@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  description: "Manages dashboard layouts, configured widgets, KPI tracking, and user\
+    \ preferences stored in Elasticsearch."
+  title: Dashboard Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8082/api/v1/dashboards
+tags:
+- name: Dashboards
+- name: Widgets
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+                type: array
+          description: OK
+      security:
+      - bearerAuth: []
+      summary: Get all dashboards for user
+      tags:
+      - Dashboards
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dashboards
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DashboardRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+      security:
+      - bearerAuth: []
+      summary: Create a new dashboard
+      tags:
+      - Dashboards
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dashboards
+  /{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+          description: OK
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get a specific dashboard config
+      tags:
+      - Dashboards
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dashboards
+components:
+  schemas:
+    DashboardRequest:
+      example:
+        name: name
+        description: description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - name
+      type: object
+    Dashboard:
+      example:
+        layout: "{}"
+        name: name
+        description: description
+        id: id
+        ownerId: 0
+        widgets:
+        - "{}"
+        - "{}"
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        ownerId:
+          type: integer
+        layout:
+          description: JSON representing the UI layout structure
+          type: object
+        widgets:
+          items:
+            description: Array of configured widgets
+            type: object
+          type: array
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

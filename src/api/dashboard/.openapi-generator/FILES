@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/DashboardsApi.ts
+apis/index.ts
+docs/Dashboard.md
+docs/DashboardRequest.md
+docs/DashboardsApi.md
+index.ts
+models/Dashboard.ts
+models/DashboardRequest.ts
+models/index.ts
+runtime.ts

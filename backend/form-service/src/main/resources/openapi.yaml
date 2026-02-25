@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  description: Dynamic form builder and submission storage mapping forms to Elasticsearch
+    indices.
+  title: Form Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8084/api/v1/forms
+tags:
+- name: Forms
+- name: Submissions
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/FormDefinition"
+                type: array
+          description: OK
+      summary: Get all forms
+      tags:
+      - Forms
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Forms
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+      security:
+      - bearerAuth: []
+      summary: Create a new dynamic form
+      tags:
+      - Forms
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Forms
+  /{formId}/submissions:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: formId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  description: Dynamic submission data
+                  type: object
+                type: array
+          description: OK
+      security:
+      - bearerAuth: []
+      summary: Get responses for a specific form
+      tags:
+      - Submissions
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Submissions
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: formId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: Key-value pair matching the form fields
+              type: object
+        required: true
+      responses:
+        "201":
+          description: Submission saved
+      summary: Submit a response to a form
+      tags:
+      - Submissions
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Submissions
+components:
+  schemas:
+    FormRequest:
+      example:
+        description: description
+        title: title
+        fields:
+        - "{}"
+        - "{}"
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        fields:
+          items:
+            type: object
+          type: array
+      required:
+      - title
+      type: object
+    FormDefinition:
+      example:
+        description: description
+        id: id
+        title: title
+        fields:
+        - "{}"
+        - "{}"
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        fields:
+          items:
+            type: object
+          type: array
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

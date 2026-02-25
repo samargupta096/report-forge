@@ -1,0 +1,15 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/com/reportforge/gateway/api/AuthApi.java
+src/main/java/com/reportforge/gateway/api/AuthApiClient.java
+src/main/java/com/reportforge/gateway/api/DashboardsApi.java
+src/main/java/com/reportforge/gateway/api/DashboardsApiClient.java
+src/main/java/com/reportforge/gateway/api/DataSourceApi.java
+src/main/java/com/reportforge/gateway/api/DataSourceApiClient.java
+src/main/java/com/reportforge/gateway/api/FormsApi.java
+src/main/java/com/reportforge/gateway/api/FormsApiClient.java
+src/main/java/com/reportforge/gateway/api/ReportsApi.java
+src/main/java/com/reportforge/gateway/api/ReportsApiClient.java
+src/main/java/com/reportforge/gateway/config/ApiKeyRequestInterceptor.java
+src/main/java/com/reportforge/gateway/config/ClientConfiguration.java

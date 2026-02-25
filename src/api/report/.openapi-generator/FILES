@@ -1,0 +1,15 @@
+.openapi-generator-ignore
+apis/ReportsApi.ts
+apis/SchedulesApi.ts
+apis/index.ts
+docs/ReportTemplate.md
+docs/ReportsApi.md
+docs/ScheduleRequest.md
+docs/SchedulesApi.md
+docs/TemplateRequest.md
+index.ts
+models/ReportTemplate.ts
+models/ScheduleRequest.ts
+models/TemplateRequest.ts
+models/index.ts
+runtime.ts

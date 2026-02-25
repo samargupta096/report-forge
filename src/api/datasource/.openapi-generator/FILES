@@ -1,0 +1,15 @@
+.openapi-generator-ignore
+apis/DataSourcesApi.ts
+apis/QueryApi.ts
+apis/index.ts
+docs/DataSourceConfig.md
+docs/DataSourceRequest.md
+docs/DataSourcesApi.md
+docs/IdQueryPostRequest.md
+docs/QueryApi.md
+index.ts
+models/DataSourceConfig.ts
+models/DataSourceRequest.ts
+models/IdQueryPostRequest.ts
+models/index.ts
+runtime.ts

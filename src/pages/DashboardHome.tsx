@@ -17,6 +17,8 @@ import AddChartDialog from "@/components/AddChartDialog";
 import html2canvas from "html2canvas";
 // import { useToast } from "@/hooks/use-toast";
 
+import { DashboardsApi, Configuration } from "@/api/dashboard";
+
 // KPIs and Charts are now fetched dynamically from JSON files
 
 function getKpiOrder(kpis: any[]) {
@@ -37,6 +39,18 @@ export default function DashboardHome() {
   const [selectedDashboard, setSelectedDashboard] = React.useState<string>("");
 
   React.useEffect(() => {
+    // Attempt to hit the newly generated Spring Boot microservices backend API
+    try {
+      const api = new DashboardsApi(new Configuration({ basePath: "http://localhost:8082" }));
+      api.dashboardsGet().then(data => {
+        console.log("Loaded Dashboards from Spring Boot backend!", data);
+      }).catch(err => {
+        console.warn("Backend microservices not started. Falling back to context dashboards.", err);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
     if (urlDashboard && dashboardOptions.find(d => d.value === urlDashboard)) {
       setSelectedDashboard(urlDashboard);
     } else if (dashboardOptions.length > 0 && !selectedDashboard) {

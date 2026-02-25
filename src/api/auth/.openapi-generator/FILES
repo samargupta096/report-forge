@@ -1,0 +1,17 @@
+.openapi-generator-ignore
+apis/AuthenticationApi.ts
+apis/UsersApi.ts
+apis/index.ts
+docs/AuthenticationApi.md
+docs/JwtResponse.md
+docs/LoginRequest.md
+docs/RegisterRequest.md
+docs/UserResponse.md
+docs/UsersApi.md
+index.ts
+models/JwtResponse.ts
+models/LoginRequest.ts
+models/RegisterRequest.ts
+models/UserResponse.ts
+models/index.ts
+runtime.ts

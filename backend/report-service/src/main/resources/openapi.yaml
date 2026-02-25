@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  description: "Manages report templates, execution, history, and scheduling. Uses\
+    \ PostgreSQL for relations and Elasticsearch for analytic report data."
+  title: Report Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8083/api/v1/reports
+tags:
+- name: Reports
+- name: Schedules
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ReportTemplate"
+                type: array
+          description: OK
+      security:
+      - bearerAuth: []
+      summary: Get all report templates
+      tags:
+      - Reports
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Reports
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+      security:
+      - bearerAuth: []
+      summary: Create a new report template
+      tags:
+      - Reports
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Reports
+  /execute/{id}:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Report execution triggered
+      security:
+      - bearerAuth: []
+      summary: Execute a report template
+      tags:
+      - Reports
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Reports
+  /schedules:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+        required: true
+      responses:
+        "201":
+          description: Scheduled
+      security:
+      - bearerAuth: []
+      summary: Create a new report schedule
+      tags:
+      - Schedules
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Schedules
+components:
+  schemas:
+    TemplateRequest:
+      example:
+        name: name
+        description: description
+        type: type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+      required:
+      - name
+      - type
+      type: object
+    ReportTemplate:
+      example:
+        name: name
+        description: description
+        id: 0
+        type: type
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      type: object
+    ScheduleRequest:
+      example:
+        cronExpression: cronExpression
+        emails:
+        - emails
+        - emails
+        reportId: 0
+      properties:
+        reportId:
+          type: integer
+        cronExpression:
+          type: string
+        emails:
+          items:
+            type: string
+          type: array
+      required:
+      - cronExpression
+      - reportId
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
