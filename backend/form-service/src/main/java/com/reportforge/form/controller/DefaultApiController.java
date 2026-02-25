@@ -3,7 +3,6 @@ package com.reportforge.form.controller;
 import com.reportforge.form.model.FormDefinition;
 import com.reportforge.form.model.FormRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +32,13 @@ import javax.annotation.Generated;
 public class DefaultApiController implements DefaultApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.form.repository.FormRepository formRepository;
 
     @Autowired
-    public DefaultApiController(NativeWebRequest request) {
+    public DefaultApiController(NativeWebRequest request,
+            com.reportforge.form.repository.FormRepository formRepository) {
         this.request = request;
+        this.formRepository = formRepository;
     }
 
     @Override
@@ -44,4 +46,27 @@ public class DefaultApiController implements DefaultApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<FormDefinition>> rootGet() {
+        List<FormDefinition> forms = new java.util.ArrayList<>();
+        for (com.reportforge.form.entity.FormEntity entity : formRepository.findAll()) {
+            FormDefinition dto = new FormDefinition();
+            dto.setId(entity.getId());
+            dto.setTitle(entity.getTitle());
+            dto.setDescription(entity.getDescription());
+            dto.setFields(entity.getFields());
+            forms.add(dto);
+        }
+        return ResponseEntity.ok(forms);
+    }
+
+    @Override
+    public ResponseEntity<Void> rootPost(@Valid @RequestBody FormRequest formRequest) {
+        com.reportforge.form.entity.FormEntity entity = new com.reportforge.form.entity.FormEntity();
+        entity.setTitle(formRequest.getTitle());
+        entity.setDescription(formRequest.getDescription());
+        entity.setFields(formRequest.getFields());
+        formRepository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

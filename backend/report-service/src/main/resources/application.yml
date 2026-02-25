@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: report-service
+  # ========================
+  # Primary JPA DataSource (for report templates & schedules metadata)
+  # ========================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/report_forge_auth
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # ========================
+  # Elasticsearch
+  # ========================
+  elasticsearch:
+    uris: http://localhost:9200
+
+  # ========================
+  # Kafka
+  # ========================
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: report-execution-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+server:
+  port: 8083
+
+# ========================
+# External Report DataSources (Configuration-Based)
+# ========================
+# Add as many datasources as needed. Each entry is identified by a unique key.
+# The report execution engine will use the key to look up the connection at runtime.
+#
+# Supported driver classes:
+#   - org.postgresql.Driver
+#   - com.mysql.cj.jdbc.Driver
+#   - oracle.jdbc.OracleDriver
+#   - com.microsoft.sqlserver.jdbc.SQLServerDriver
+#   - org.h2.Driver
+#
+report:
+  datasources:
+    sources:
+      # Example: Analytics PostgreSQL database
+      analytics-db:
+        url: jdbc:postgresql://localhost:5432/analytics
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+        max-pool-size: 5
+
+      # Example: Legacy MySQL warehouse
+      # warehouse-db:
+      #   url: jdbc:mysql://localhost:3306/warehouse
+      #   username: root
+      #   password: secret
+      #   driver-class-name: com.mysql.cj.jdbc.Driver
+      #   max-pool-size: 10
+
+      # Example: H2 in-memory for testing
+      # test-db:
+      #   url: jdbc:h2:mem:testdb
+      #   username: sa
+      #   password:
+      #   driver-class-name: org.h2.Driver
+      #   max-pool-size: 3

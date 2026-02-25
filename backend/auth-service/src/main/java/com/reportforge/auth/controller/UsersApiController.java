@@ -2,7 +2,6 @@ package com.reportforge.auth.controller;
 
 import com.reportforge.auth.model.UserResponse;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +31,12 @@ import javax.annotation.Generated;
 public class UsersApiController implements UsersApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.auth.repository.UserRepository userRepository;
 
     @Autowired
-    public UsersApiController(NativeWebRequest request) {
+    public UsersApiController(NativeWebRequest request, com.reportforge.auth.repository.UserRepository userRepository) {
         this.request = request;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -43,4 +44,18 @@ public class UsersApiController implements UsersApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<UserResponse>> usersGet() {
+        List<com.reportforge.auth.entity.User> users = userRepository.findAll();
+        List<UserResponse> response = users.stream().map(u -> {
+            UserResponse dto = new UserResponse();
+            dto.setId(u.getId().intValue());
+            dto.setUsername(u.getUsername());
+            dto.setEmail(u.getEmail());
+            dto.setRoles(new java.util.ArrayList<>(u.getRoles()));
+            return dto;
+        }).collect(java.util.stream.Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
 }

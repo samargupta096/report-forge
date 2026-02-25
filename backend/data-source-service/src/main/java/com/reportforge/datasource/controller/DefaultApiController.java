@@ -3,7 +3,6 @@ package com.reportforge.datasource.controller;
 import com.reportforge.datasource.model.DataSourceConfig;
 import com.reportforge.datasource.model.DataSourceRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +32,13 @@ import javax.annotation.Generated;
 public class DefaultApiController implements DefaultApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.datasource.repository.DataSourceRepository dataSourceRepository;
 
     @Autowired
-    public DefaultApiController(NativeWebRequest request) {
+    public DefaultApiController(NativeWebRequest request,
+            com.reportforge.datasource.repository.DataSourceRepository dataSourceRepository) {
         this.request = request;
+        this.dataSourceRepository = dataSourceRepository;
     }
 
     @Override
@@ -44,4 +46,32 @@ public class DefaultApiController implements DefaultApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<DataSourceConfig>> rootGet() {
+        List<com.reportforge.datasource.entity.DataSourceEntity> entities = dataSourceRepository.findAll();
+        List<DataSourceConfig> result = new java.util.ArrayList<>();
+        for (com.reportforge.datasource.entity.DataSourceEntity e : entities) {
+            DataSourceConfig dto = new DataSourceConfig();
+            dto.setId(e.getId());
+            dto.setName(e.getName());
+            dto.setType(e.getType());
+            dto.setUrl(e.getUrl());
+            dto.setStatus(DataSourceConfig.StatusEnum.valueOf(e.getStatus().name()));
+            result.add(dto);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @Override
+    public ResponseEntity<Void> rootPost(@Valid @RequestBody DataSourceRequest dataSourceRequest) {
+        com.reportforge.datasource.entity.DataSourceEntity entity = new com.reportforge.datasource.entity.DataSourceEntity();
+        entity.setName(dataSourceRequest.getName());
+        entity.setType(dataSourceRequest.getType());
+        entity.setUrl(dataSourceRequest.getUrl());
+        entity.setUsername(dataSourceRequest.getUsername());
+        entity.setPassword(dataSourceRequest.getPassword());
+        entity.setStatus(com.reportforge.datasource.entity.DataSourceEntity.DataSourceStatus.DISCONNECTED);
+        dataSourceRepository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

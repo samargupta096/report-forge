@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  description: "Centralized identity management. Handles login, registration, and\
+    \ RBAC via JWT."
+  title: Auth & User Service
+  version: 1.0.0
+servers:
+- url: http://localhost:8081/api/v1/auth
+tags:
+- name: Authentication
+- name: Users
+paths:
+  /login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtResponse"
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Authenticate user and issue JWT
+      tags:
+      - Authentication
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Authentication
+  /register:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+      summary: Register a new user
+      tags:
+      - Authentication
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Authentication
+  /users:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+                type: array
+          description: OK
+      security:
+      - bearerAuth: []
+      summary: List all users (Requires ADMIN)
+      tags:
+      - Users
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Users
+components:
+  schemas:
+    LoginRequest:
+      example:
+        password: password
+        username: username
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - username
+      type: object
+    RegisterRequest:
+      example:
+        password: password
+        email: email
+        username: username
+      properties:
+        username:
+          type: string
+        email:
+          format: email
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      - username
+      type: object
+    JwtResponse:
+      example:
+        roles:
+        - roles
+        - roles
+        id: 0
+        type: Bearer
+        token: token
+        username: username
+      properties:
+        token:
+          type: string
+        type:
+          example: Bearer
+          type: string
+        id:
+          format: int64
+          type: integer
+        username:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+    UserResponse:
+      example:
+        roles:
+        - roles
+        - roles
+        id: 0
+        email: email
+        username: username
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

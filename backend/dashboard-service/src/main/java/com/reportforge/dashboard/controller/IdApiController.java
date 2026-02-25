@@ -2,7 +2,6 @@ package com.reportforge.dashboard.controller;
 
 import com.reportforge.dashboard.model.Dashboard;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +31,13 @@ import javax.annotation.Generated;
 public class IdApiController implements IdApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.dashboard.repository.DashboardRepository dashboardRepository;
 
     @Autowired
-    public IdApiController(NativeWebRequest request) {
+    public IdApiController(NativeWebRequest request,
+            com.reportforge.dashboard.repository.DashboardRepository dashboardRepository) {
         this.request = request;
+        this.dashboardRepository = dashboardRepository;
     }
 
     @Override
@@ -43,4 +45,22 @@ public class IdApiController implements IdApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<Dashboard> idGet(@PathVariable("id") String id) {
+        Optional<com.reportforge.dashboard.entity.DashboardEntity> entityOpt = dashboardRepository.findById(id);
+        if (!entityOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        com.reportforge.dashboard.entity.DashboardEntity entity = entityOpt.get();
+        Dashboard d = new Dashboard();
+        d.setId(entity.getId());
+        d.setName(entity.getName());
+        d.setDescription(entity.getDescription());
+        d.setOwnerId(entity.getOwnerId());
+        d.setLayout(entity.getLayout());
+        d.setWidgets(entity.getWidgets());
+
+        return ResponseEntity.ok(d);
+    }
 }

@@ -2,7 +2,6 @@ package com.reportforge.report.controller;
 
 import com.reportforge.report.model.ScheduleRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +31,13 @@ import javax.annotation.Generated;
 public class SchedulesApiController implements SchedulesApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.report.repository.ReportScheduleRepository scheduleRepository;
 
     @Autowired
-    public SchedulesApiController(NativeWebRequest request) {
+    public SchedulesApiController(NativeWebRequest request,
+            com.reportforge.report.repository.ReportScheduleRepository scheduleRepository) {
         this.request = request;
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Override
@@ -43,4 +45,13 @@ public class SchedulesApiController implements SchedulesApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<Void> schedulesPost(@Valid @RequestBody ScheduleRequest scheduleRequest) {
+        com.reportforge.report.entity.ReportScheduleEntity entity = new com.reportforge.report.entity.ReportScheduleEntity();
+        entity.setTemplateId(scheduleRequest.getTemplateId());
+        entity.setCronExpression(scheduleRequest.getCronExpression());
+        entity.setFormat(scheduleRequest.getFormat());
+        scheduleRepository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

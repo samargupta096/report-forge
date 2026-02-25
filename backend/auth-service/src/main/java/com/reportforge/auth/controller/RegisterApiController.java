@@ -2,7 +2,6 @@ package com.reportforge.auth.controller;
 
 import com.reportforge.auth.model.RegisterRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +31,16 @@ import javax.annotation.Generated;
 public class RegisterApiController implements RegisterApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.auth.repository.UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder encoder;
 
     @Autowired
-    public RegisterApiController(NativeWebRequest request) {
+    public RegisterApiController(NativeWebRequest request,
+            com.reportforge.auth.repository.UserRepository userRepository,
+            org.springframework.security.crypto.password.PasswordEncoder encoder) {
         this.request = request;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -43,4 +48,26 @@ public class RegisterApiController implements RegisterApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<Void> registerPost(@Valid @RequestBody RegisterRequest registerRequest) {
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        com.reportforge.auth.entity.User user = new com.reportforge.auth.entity.User(registerRequest.getUsername(),
+                registerRequest.getEmail(),
+                encoder.encode(registerRequest.getPassword()));
+
+        java.util.Set<String> roles = new java.util.HashSet<>();
+        roles.add("ROLE_USER");
+        user.setRoles(roles);
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

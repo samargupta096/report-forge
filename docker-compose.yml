@@ -1,0 +1,275 @@
+version: '3.8'
+
+services:
+  # ========================
+  # Infrastructure Services
+  # ========================
+  postgres:
+    image: postgres:15-alpine
+    container_name: report_forge_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: report_forge_auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rf_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: report_forge_es
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - rf_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: report_forge_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rf_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: report_forge_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - rf_network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: report_forge_kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    networks:
+      - rf_network
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ========================
+  # Config Server (must start first)
+  # ========================
+  config-server:
+    build:
+      context: ./backend/config-server
+    container_name: rf_config_server
+    ports:
+      - "8888:8888"
+    networks:
+      - rf_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========================
+  # Business Microservices
+  # ========================
+  auth-service:
+    build:
+      context: ./backend/auth-service
+    container_name: rf_auth_service
+    ports:
+      - "8081:8081"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/report_forge_auth
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  dashboard-service:
+    build:
+      context: ./backend/dashboard-service
+    container_name: rf_dashboard_service
+    ports:
+      - "8082:8082"
+    environment:
+      - spring.elasticsearch.uris=http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  report-service:
+    build:
+      context: ./backend/report-service
+    container_name: rf_report_service
+    ports:
+      - "8083:8083"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/report_forge_auth
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.elasticsearch.uris=http://elasticsearch:9200
+      - spring.kafka.bootstrap-servers=kafka:9092
+      - spring.cloud.config.uri=http://config-server:8888
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  form-service:
+    build:
+      context: ./backend/form-service
+    container_name: rf_form_service
+    ports:
+      - "8084:8084"
+    environment:
+      - spring.elasticsearch.uris=http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  data-source-service:
+    build:
+      context: ./backend/data-source-service
+    container_name: rf_data_source_service
+    ports:
+      - "8085:8085"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/report_forge_auth
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  data-pipeline-service:
+    build:
+      context: ./backend/data-pipeline-service
+    container_name: rf_data_pipeline_service
+    ports:
+      - "8086:8086"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/report_forge_auth
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.elasticsearch.uris=http://elasticsearch:9200
+      - spring.kafka.bootstrap-servers=kafka:9092
+      - spring.cloud.config.uri=http://config-server:8888
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - rf_network
+
+  # ========================
+  # API Gateway (entry point)
+  # ========================
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    container_name: rf_api_gateway
+    ports:
+      - "8080:8080"
+    environment:
+      # Override routes to use Docker service names
+      - spring.cloud.gateway.routes[0].uri=http://auth-service:8081
+      - spring.cloud.gateway.routes[1].uri=http://dashboard-service:8082
+      - spring.cloud.gateway.routes[2].uri=http://report-service:8083
+      - spring.cloud.gateway.routes[3].uri=http://form-service:8084
+      - spring.cloud.gateway.routes[4].uri=http://data-source-service:8085
+      - spring.cloud.gateway.routes[5].id=data-pipeline-service
+      - spring.cloud.gateway.routes[5].uri=http://data-pipeline-service:8086
+      - spring.cloud.gateway.routes[5].predicates[0]=Path=/api/pipelines/**
+      - spring.cloud.gateway.routes[5].filters[0]=StripPrefix=2
+      - spring.redis.host=redis
+    depends_on:
+      - auth-service
+      - dashboard-service
+      - report-service
+      - form-service
+      - data-source-service
+      - data-pipeline-service
+      - redis
+    networks:
+      - rf_network
+
+  # ========================
+  # Frontend
+  # ========================
+  frontend:
+    build:
+      context: .
+    container_name: report_forge_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - rf_network
+
+networks:
+  rf_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  es_data:
+  redis_data:
+  kafka_data:

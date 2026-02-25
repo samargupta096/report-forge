@@ -2,7 +2,6 @@ package com.reportforge.datasource.controller;
 
 import com.reportforge.datasource.model.IdQueryPostRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +31,13 @@ import javax.annotation.Generated;
 public class IdApiController implements IdApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.datasource.repository.DataSourceRepository dataSourceRepository;
 
     @Autowired
-    public IdApiController(NativeWebRequest request) {
+    public IdApiController(NativeWebRequest request,
+            com.reportforge.datasource.repository.DataSourceRepository dataSourceRepository) {
         this.request = request;
+        this.dataSourceRepository = dataSourceRepository;
     }
 
     @Override
@@ -43,4 +45,19 @@ public class IdApiController implements IdApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<Object>> idQueryPost(@PathVariable("id") Integer id,
+            @Valid @RequestBody IdQueryPostRequest idQueryPostRequest) {
+        if (!dataSourceRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        // In a production service, this would use JDBC to connect to the remote DB
+        // and execute the query from idQueryPostRequest.getSql()
+        List<Object> placeholderResults = new java.util.ArrayList<>();
+        java.util.Map<String, Object> row = new java.util.LinkedHashMap<>();
+        row.put("message", "Query executed against data source " + id);
+        row.put("sql", idQueryPostRequest.getSql());
+        placeholderResults.add(row);
+        return ResponseEntity.ok(placeholderResults);
+    }
 }

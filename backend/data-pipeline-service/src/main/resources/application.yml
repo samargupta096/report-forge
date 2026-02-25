@@ -1,0 +1,124 @@
+spring:
+  application:
+    name: data-pipeline-service
+
+  # ========================
+  # Kafka
+  # ========================
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: data-pipeline-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  # ========================
+  # PostgreSQL (for ingest phase)
+  # ========================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/report_forge_auth
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # ========================
+  # Elasticsearch (for ingest phase)
+  # ========================
+  elasticsearch:
+    uris: http://localhost:9200
+
+server:
+  port: 8086
+
+# ========================
+# Dead Letter Queue
+# ========================
+pipeline:
+  dlq-topic: pipeline.dlq
+
+  # ========================
+  # Pipeline Definitions
+  # ========================
+  definitions:
+    report-pipeline:
+      description: "Process report data from external sources"
+      phases:
+        - name: validate
+          topic-in: pipeline.report.raw
+          topic-out: pipeline.report.validated
+          rules:
+            - field: email
+              type: NOT_BLANK
+            - field: amount
+              type: NUMERIC
+              min: 0
+            - field: name
+              type: REQUIRED
+
+        - name: transform
+          topic-in: pipeline.report.validated
+          topic-out: pipeline.report.transformed
+          rules:
+            - field: full_name
+              type: CONCAT
+              sources:
+                - first_name
+                - last_name
+              separator: " "
+            - field: amount
+              type: ROUND
+              decimals: 2
+            - field: email
+              type: LOWERCASE
+
+        - name: enhance
+          topic-in: pipeline.report.transformed
+          topic-out: pipeline.report.enhanced
+          rules:
+            - field: processed_at
+              type: TIMESTAMP
+            - field: pipeline_version
+              type: DEFAULT_VALUE
+              value: "1.0"
+
+        - name: ingest
+          topic-in: pipeline.report.enhanced
+          target:
+            type: POSTGRESQL
+            table: processed_reports
+            mode: UPSERT
+            key-fields:
+              - id
+
+    # -----------------------------------------------
+    # Example: Add another pipeline with zero code changes
+    # -----------------------------------------------
+    # form-pipeline:
+    #   description: "Process form submissions"
+    #   phases:
+    #     - name: validate
+    #       topic-in: pipeline.form.raw
+    #       topic-out: pipeline.form.validated
+    #       rules:
+    #         - field: respondent_email
+    #           type: NOT_BLANK
+    #     - name: transform
+    #       topic-in: pipeline.form.validated
+    #       topic-out: pipeline.form.transformed
+    #       rules:
+    #         - field: respondent_email
+    #           type: LOWERCASE
+    #     - name: ingest
+    #       topic-in: pipeline.form.transformed
+    #       target:
+    #         type: ELASTICSEARCH
+    #         index: form_submissions_processed

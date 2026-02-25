@@ -3,7 +3,6 @@ package com.reportforge.dashboard.controller;
 import com.reportforge.dashboard.model.Dashboard;
 import com.reportforge.dashboard.model.DashboardRequest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +32,13 @@ import javax.annotation.Generated;
 public class DefaultApiController implements DefaultApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.dashboard.repository.DashboardRepository dashboardRepository;
 
     @Autowired
-    public DefaultApiController(NativeWebRequest request) {
+    public DefaultApiController(NativeWebRequest request,
+            com.reportforge.dashboard.repository.DashboardRepository dashboardRepository) {
         this.request = request;
+        this.dashboardRepository = dashboardRepository;
     }
 
     @Override
@@ -44,4 +46,29 @@ public class DefaultApiController implements DefaultApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<Dashboard>> rootGet() {
+        List<Dashboard> dashboards = new java.util.ArrayList<>();
+        Iterable<com.reportforge.dashboard.entity.DashboardEntity> entities = dashboardRepository.findAll();
+        for (com.reportforge.dashboard.entity.DashboardEntity entity : entities) {
+            Dashboard d = new Dashboard();
+            d.setId(entity.getId());
+            d.setName(entity.getName());
+            d.setDescription(entity.getDescription());
+            d.setOwnerId(entity.getOwnerId());
+            d.setLayout(entity.getLayout());
+            d.setWidgets(entity.getWidgets());
+            dashboards.add(d);
+        }
+        return ResponseEntity.ok(dashboards);
+    }
+
+    @Override
+    public ResponseEntity<Void> rootPost(@Valid @RequestBody DashboardRequest dashboardRequest) {
+        com.reportforge.dashboard.entity.DashboardEntity entity = new com.reportforge.dashboard.entity.DashboardEntity();
+        entity.setName(dashboardRequest.getName());
+        entity.setDescription(dashboardRequest.getDescription());
+        dashboardRepository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

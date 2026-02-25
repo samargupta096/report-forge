@@ -1,7 +1,5 @@
 package com.reportforge.form.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,10 +29,13 @@ import javax.annotation.Generated;
 public class FormIdApiController implements FormIdApi {
 
     private final NativeWebRequest request;
+    private final com.reportforge.form.repository.FormSubmissionRepository submissionRepository;
 
     @Autowired
-    public FormIdApiController(NativeWebRequest request) {
+    public FormIdApiController(NativeWebRequest request,
+            com.reportforge.form.repository.FormSubmissionRepository submissionRepository) {
         this.request = request;
+        this.submissionRepository = submissionRepository;
     }
 
     @Override
@@ -42,4 +43,32 @@ public class FormIdApiController implements FormIdApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<List<Object>> formIdSubmissionsGet(@PathVariable("formId") String formId) {
+        java.util.List<com.reportforge.form.entity.FormSubmissionEntity> submissions = submissionRepository
+                .findByFormId(formId);
+        List<Object> result = new java.util.ArrayList<>();
+        for (com.reportforge.form.entity.FormSubmissionEntity s : submissions) {
+            result.add(s.getData());
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @Override
+    public ResponseEntity<Void> formIdSubmissionsPost(@PathVariable("formId") String formId,
+            @Valid @RequestBody Object body) {
+        com.reportforge.form.entity.FormSubmissionEntity entity = new com.reportforge.form.entity.FormSubmissionEntity();
+        entity.setFormId(formId);
+        if (body instanceof java.util.Map) {
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Object> dataMap = (java.util.Map<String, Object>) body;
+            entity.setData(dataMap);
+        } else {
+            java.util.Map<String, Object> wrapper = new java.util.HashMap<>();
+            wrapper.put("value", body);
+            entity.setData(wrapper);
+        }
+        submissionRepository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }
