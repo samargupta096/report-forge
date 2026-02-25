@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Form Service
+  version: 1.0.0
+  description: Dynamic form builder and submission storage mapping forms to Elasticsearch indices.
+servers:
+  - url: http://localhost:8084/api/v1/forms
+tags:
+  - name: Forms
+  - name: Submissions
+paths:
+  /:
+    get:
+      tags:
+        - Forms
+      summary: Get all forms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FormDefinition"
+    post:
+      tags:
+        - Forms
+      summary: Create a new dynamic form
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormRequest"
+      responses:
+        "201":
+          description: Created
+  /{formId}/submissions:
+    get:
+      tags:
+        - Submissions
+      summary: Get responses for a specific form
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: formId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Dynamic submission data
+    post:
+      tags:
+        - Submissions
+      summary: Submit a response to a form
+      parameters:
+        - name: formId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Key-value pair matching the form fields
+      responses:
+        "201":
+          description: Submission saved
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    FormRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object
+    FormDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object

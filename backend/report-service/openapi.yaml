@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: Report Service
+  version: 1.0.0
+  description: Manages report templates, execution, history, and scheduling. Uses PostgreSQL for relations and Elasticsearch for analytic report data.
+servers:
+  - url: http://localhost:8083/api/v1/reports
+tags:
+  - name: Reports
+  - name: Schedules
+paths:
+  /:
+    get:
+      tags:
+        - Reports
+      summary: Get all report templates
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportTemplate"
+    post:
+      tags:
+        - Reports
+      summary: Create a new report template
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateRequest"
+      responses:
+        "201":
+          description: Created
+  /execute/{id}:
+    post:
+      tags:
+        - Reports
+      summary: Execute a report template
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Report execution triggered
+  /schedules:
+    post:
+      tags:
+        - Schedules
+      summary: Create a new report schedule
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+      responses:
+        "201":
+          description: Scheduled
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    TemplateRequest:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+    ReportTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    ScheduleRequest:
+      type: object
+      required:
+        - reportId
+        - cronExpression
+      properties:
+        reportId:
+          type: integer
+        cronExpression:
+          type: string
+        emails:
+          type: array
+          items:
+            type: string

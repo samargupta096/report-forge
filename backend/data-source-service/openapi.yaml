@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Data Source Service
+  version: 1.0.0
+  description: Manages external database connections and acts as a proxy to query remote databases securely.
+servers:
+  - url: http://localhost:8085/api/v1/data-sources
+tags:
+  - name: DataSources
+  - name: Query
+paths:
+  /:
+    get:
+      tags:
+        - DataSources
+      summary: Get configured data sources
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DataSourceConfig"
+    post:
+      tags:
+        - DataSources
+      summary: Configure a new data source
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataSourceRequest"
+      responses:
+        "201":
+          description: Created
+  /{id}/query:
+    post:
+      tags:
+        - Query
+      summary: Execute a query against a remote data source
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sql:
+                  type: string
+      responses:
+        "200":
+          description: Query results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    DataSourceRequest:
+      type: object
+      required:
+        - name
+        - type
+        - url
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [POSTGRES, MYSQL, MONGODB, SQLSERVER, ELASTICSEARCH]
+        url:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    DataSourceConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+          description: Obfuscated or partial URL for display
+        status:
+          type: string
+          enum: [CONNECTED, FAILED, PENDING]

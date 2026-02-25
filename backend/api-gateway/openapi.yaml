@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: API Gateway Service
+  version: 1.0.0
+  description: Handles routing, load balancing, CORS, and rate limiting for the ReportForge platform.
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /auth/**:
+    get:
+      tags:
+        - Routing
+      summary: Routes to Auth Service
+      responses:
+        "200":
+          description: Successful routing
+  /dashboards/**:
+    get:
+      tags:
+        - Routing
+      summary: Routes to Dashboard Service
+      responses:
+        "200":
+          description: Successful routing
+  /reports/**:
+    get:
+      tags:
+        - Routing
+      summary: Routes to Report Service
+      responses:
+        "200":
+          description: Successful routing
+  /forms/**:
+    get:
+      tags:
+        - Routing
+      summary: Routes to Form Service
+      responses:
+        "200":
+          description: Successful routing
+  /data-source/**:
+    get:
+      tags:
+        - Routing
+      summary: Routes to Data Source Service
+      responses:
+        "200":
+          description: Successful routing
