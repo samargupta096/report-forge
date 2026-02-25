@@ -18,7 +18,7 @@ type Props = {
 
 export default function DashboardList({ dashboards, onEdit, onDelete, onEditChartsWidgets }: Props) {
   return (
-    <div className="overflow-x-auto rounded shadow border bg-white mb-8">
+    <div className="overflow-x-auto rounded shadow border bg-card mb-8">
       <table className="min-w-full text-sm">
         <thead>
           <tr className="text-left border-b">

@@ -16,7 +16,7 @@ const SignInPage = () => {
 
   return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-gradient-to-br from-purple-100 via-blue-100 to-cyan-100 dark:from-[#22263c] dark:via-[#33314e] dark:to-[#10313f] transition-colors duration-500 p-4">
-      <div className="mx-auto max-w-md w-full flex flex-col items-center bg-white dark:bg-background rounded-lg shadow-md p-8">
+      <div className="mx-auto max-w-md w-full flex flex-col items-center bg-card dark:bg-background rounded-lg shadow-md p-8">
         <LogIn className="mb-2 text-primary" size={36} />
         <h2 className="text-2xl font-bold mb-6">Sign In</h2>
         <form className="w-full" onSubmit={handleSubmit}>

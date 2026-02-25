@@ -39,12 +39,12 @@ export default function FormSubmissionsViewer() {
         </select>
       </div>
       {selectedForm && (
-        <div className="overflow-x-auto rounded bg-white border p-3">
+        <div className="overflow-x-auto rounded bg-card border p-3">
           <h4 className="font-semibold mb-3">Submissions for <span className="text-primary">{selectedForm}</span></h4>
           {submissions.length === 0 ? (
             <div className="italic text-muted-foreground">No submissions yet.</div>
           ) : (
-            <table className="min-w-full border bg-white rounded">
+            <table className="min-w-full border bg-card rounded">
               <thead>
                 <tr>
                   {Object.keys(submissions[0]).map((field, idx) => (

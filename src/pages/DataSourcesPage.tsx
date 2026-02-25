@@ -159,7 +159,7 @@ export default function DataSourcesPage() {
       </div>
 
       {/* Source Table */}
-      <div className="rounded bg-white p-0 shadow-sm border">
+      <div className="rounded bg-card p-0 shadow-sm border">
         <Table>
           <TableHeader>
             <TableRow>

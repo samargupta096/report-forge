@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import ReportTemplateTable from "@/components/ReportTemplateTable";
-import { LayoutTemplate, Filter, Plus, Columns2 } from "lucide-react";
+import { LayoutTemplate, Filter, Plus, Columns2, Download } from "lucide-react";
 import CreateTemplateDialog, { TemplateFormValues } from "@/components/CreateTemplateDialog";
 import ChartPreview from "@/components/ChartPreview";
 import KpiWidget from "@/components/KpiWidget";
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import ReportFolders from "@/components/ReportFolders";
 import VersionModal from "@/components/VersionModal";
 import ScheduleReportDialog from "@/components/ScheduleReportDialog";
+import * as XLSX from "xlsx";
 
 const SAMPLE_REPORTS = [
   { id: 1, name: "Q2 Financials", folder: "Finance", editable: true },
@@ -192,6 +193,22 @@ export default function ReportsPage() {
     setVisibleColumns(next);
   };
 
+  const handleExportCSV = () => {
+    const dataToExport = filteredTemplates.map(t => ({
+      "Template Name": t.name,
+      "Type": t.type,
+      "Last Edited": t.updated,
+      "Description": t.description || ""
+    }));
+    
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Templates");
+    XLSX.writeFile(wb, "Report_Templates.csv", { bookType: "csv" });
+    
+    addAudit("Exported Templates to CSV", "Templates Table");
+  };
+
   return (
     <section>
       {/* Filters */}
@@ -217,7 +234,7 @@ export default function ReportsPage() {
           <h5 className="font-semibold mb-2 mt-4">Sample Reports</h5>
           <ul className="space-y-2">
             {SAMPLE_REPORTS.map(r => (
-              <li key={r.id} className="flex gap-2 items-center justify-between bg-white/70 dark:bg-black/50 backdrop-blur rounded border p-2">
+              <li key={r.id} className="flex gap-2 items-center justify-between bg-card/70 dark:bg-black/50 backdrop-blur rounded border p-2">
                 <span>{r.name} <span className="text-xs text-muted-foreground">({r.folder})</span></span>
                 <div className="flex gap-1">
                   <button
@@ -270,7 +287,7 @@ export default function ReportsPage() {
           </Button>
         </CreateTemplateDialog>
       </div>
-      <div className="rounded bg-white/80 dark:bg-black/60 p-3 sm:p-5 shadow-sm text-muted-foreground mb-8 overflow-x-auto backdrop-blur-md">
+      <div className="rounded bg-card/80 dark:bg-black/60 p-3 sm:p-5 shadow-sm text-muted-foreground mb-8 overflow-x-auto backdrop-blur-md">
         <div className="mb-4 flex flex-col md:flex-row flex-wrap gap-2 md:gap-4 justify-between">
           <div className="flex gap-2 flex-wrap">
             {/* Filter Dropdown */}
@@ -327,6 +344,11 @@ export default function ReportsPage() {
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* Export CSV Button */}
+            <Button size="sm" variant="outline" onClick={handleExportCSV}>
+              <Download className="mr-1" size={16} />
+              Export CSV
+            </Button>
           </div>
           <span className="text-xs text-muted-foreground self-center">
             Total: {filteredTemplates.length} templates

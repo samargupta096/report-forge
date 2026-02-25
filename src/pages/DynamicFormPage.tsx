@@ -82,7 +82,7 @@ export default function DynamicFormPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white border rounded p-6 my-8 shadow">
+    <div className="max-w-xl mx-auto bg-card border rounded p-6 my-8 shadow">
       <h1 className="text-2xl font-bold mb-3">{form.name}</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         {form.fields.map(f => (

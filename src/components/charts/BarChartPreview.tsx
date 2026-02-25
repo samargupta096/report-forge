@@ -148,10 +148,10 @@ export default function BarChartPreview({
     <div className="w-full">
       {/* Chart Title - Optional, can be removed if not needed */}
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">
+        <h3 className="text-lg font-semibold text-foreground">
           Bar Chart Visualization
         </h3>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Interactive bar chart with {data.length} data points
         </p>
       </div>
@@ -214,7 +214,7 @@ export default function BarChartPreview({
       </ResponsiveContainer>
 
       {/* Chart Footer - Optional metadata */}
-      <div className="mt-2 text-xs text-gray-500 text-center">
+      <div className="mt-2 text-xs text-muted-foreground text-center">
         Data points: {data.length} | Last updated: {new Date().toLocaleDateString()}
       </div>
     </div>
@@ -250,7 +250,7 @@ export default function BarChartPreview({
  * 3. Dashboard Integration:
  * ```jsx
  * const DashboardChart = () => (
- *   <div className="bg-white p-6 rounded-lg shadow">
+ *   <div className="bg-card p-6 rounded-lg shadow">
  *     <BarChartPreview 
  *       data={fetchedData}
  *       height={350}

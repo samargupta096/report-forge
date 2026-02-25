@@ -25,7 +25,7 @@ export function AppTabs({ defaultTab = "db-config", children }: AppTabsProps) {
   return (
     <div className="w-full">
       {/* Tabs */}
-      <div className="flex gap-2 border-b bg-white dark:bg-background mb-2">
+      <div className="flex gap-2 border-b bg-card dark:bg-background mb-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}

@@ -8,7 +8,7 @@ type Props = {
 
 export default function RoleSwitcher({ role, setRole }: Props) {
   return (
-    <div className="flex gap-2 items-center p-2 rounded border bg-white shadow-sm">
+    <div className="flex gap-2 items-center p-2 rounded border bg-card shadow-sm">
       <span className="text-xs text-muted-foreground">Role:</span>
       <select
         value={role}

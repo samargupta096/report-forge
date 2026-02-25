@@ -48,7 +48,7 @@ export function RoleList({ selectedRoleId, setSelectedRoleId, roles, actions, on
                 {role.actionIds.map(id => {
                   const action = actions.find(a => a.id === id);
                   return (
-                    <span key={id} className="bg-gray-100 text-xs px-2 rounded border">{action?.name}</span>
+                    <span key={id} className="bg-muted text-xs px-2 rounded border">{action?.name}</span>
                   );
                 })}
               </div>

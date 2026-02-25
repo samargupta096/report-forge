@@ -30,7 +30,7 @@ export default function CreatedFormsPanel({ forms }: CreatedFormsPanelProps) {
       <div className="font-semibold mb-2">Created Forms</div>
       <ul className="space-y-2">
         {forms.map(form => (
-          <li key={form.id} className="border rounded px-3 py-2 bg-white shadow-sm">
+          <li key={form.id} className="border rounded px-3 py-2 bg-card shadow-sm">
             <div className="font-bold">{form.name}</div>
             <div className="text-xs text-muted-foreground">Fields: {form.fields.length}</div>
           </li>

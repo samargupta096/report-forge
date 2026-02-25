@@ -141,14 +141,14 @@ export default function FormBuilder({
 
   // Main component render
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-card rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Form Builder</h1>
-              <p className="text-gray-600">Create and customize dynamic forms</p>
+              <h1 className="text-2xl font-bold text-foreground">Form Builder</h1>
+              <p className="text-muted-foreground">Create and customize dynamic forms</p>
             </div>
             
             <div className="flex items-center gap-2">
@@ -200,14 +200,14 @@ export default function FormBuilder({
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Left Sidebar - Field Types */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
+              <div className="bg-card rounded-lg shadow-sm p-4 sticky top-4">
                 <FieldTypeSelector onAddField={addField} readOnly={readOnly} />
               </div>
             </div>
 
             {/* Center - Form Fields */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="bg-card rounded-lg shadow-sm p-6">
                 <h3 className="font-semibold text-lg mb-4">
                   Form Fields ({form.fields.length})
                 </h3>
@@ -224,7 +224,7 @@ export default function FormBuilder({
 
             {/* Right Sidebar - Field Editor */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
+              <div className="bg-card rounded-lg shadow-sm p-4 sticky top-4">
                 <FieldEditor
                   selectedField={selectedField}
                   onUpdateField={updateField}

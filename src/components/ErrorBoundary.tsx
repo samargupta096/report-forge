@@ -36,17 +36,17 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
-        <div className="flex flex-col items-center justify-center min-h-[400px] w-full p-6 text-center bg-gray-50/50 rounded-lg border border-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-[400px] w-full p-6 text-center bg-muted/50 rounded-lg border border-gray-100">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
             <AlertTriangle className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
-          <p className="text-sm text-gray-500 mb-6 max-w-md">
+          <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-md">
             We encountered an unexpected error while trying to render this component. 
             Reporting this issue can help us fix it faster.
           </p>
           
-          <div className="bg-white border rounded p-3 text-xs text-left text-gray-600 mb-6 overflow-auto max-w-full max-h-32 shadow-inner font-mono">
+          <div className="bg-card border rounded p-3 text-xs text-left text-muted-foreground mb-6 overflow-auto max-w-full max-h-32 shadow-inner font-mono">
             {this.state.error?.message || "Unknown rendering error occurred"}
           </div>
 

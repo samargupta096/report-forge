@@ -218,7 +218,7 @@ export default function SchedulesPage() {
         </Dialog>
       </div>
       {/* Schedules Table */}
-      <div className="rounded bg-white p-3 sm:p-5 shadow-sm text-muted-foreground overflow-x-auto">
+      <div className="rounded bg-card p-3 sm:p-5 shadow-sm text-muted-foreground overflow-x-auto">
         {schedules.length === 0 ? (
           <p className="text-center py-10 text-sm text-muted-foreground">
             No schedules created yet.

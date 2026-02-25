@@ -11,7 +11,7 @@ type KpiWidgetProps = {
 export default function KpiWidget({ label, value, icon, color }: KpiWidgetProps) {
   return (
     <div
-      className={`rounded-lg shadow-sm bg-white flex flex-col gap-1 p-4 border border-muted min-w-[160px]`}
+      className={`rounded-lg shadow-sm bg-card flex flex-col gap-1 p-4 border border-muted min-w-[160px]`}
     >
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
         {icon}

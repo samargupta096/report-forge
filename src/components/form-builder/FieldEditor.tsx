@@ -30,7 +30,7 @@ export default function FieldEditor({
 }: FieldEditorProps) {
   if (!selectedField) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted-foreground">
         <div className="mb-3">⚙️</div>
         <p className="text-sm">Select a field to edit its properties</p>
       </div>
@@ -38,7 +38,7 @@ export default function FieldEditor({
   }
 
   return (
-    <div className="space-y-4 p-4 border rounded-lg bg-gray-50">
+    <div className="space-y-4 p-4 border rounded-lg bg-muted">
       <h3 className="font-semibold text-sm text-gray-700">
         Edit Field: {selectedField.label}
       </h3>

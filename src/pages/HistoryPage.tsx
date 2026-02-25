@@ -79,7 +79,7 @@ function StatusBadge({ status }: { status: string }) {
       );
     case "Queued":
       return (
-        <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs bg-gray-100 text-gray-700">
+        <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs bg-muted text-gray-700">
           <Clock10 className="w-3 h-3 text-gray-400" /> Queued
         </span>
       );
@@ -134,7 +134,7 @@ export default function HistoryPage() {
       <p className="mb-6">
         Track recent report executions and activity. <span className="italic text-muted-foreground">(History table/audit viewer coming soon!)</span>
       </p>
-      <div className="rounded bg-white p-5 shadow-sm">
+      <div className="rounded bg-card p-5 shadow-sm">
         <Table>
           <TableHeader>
             <TableRow>

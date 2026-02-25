@@ -12,7 +12,7 @@ export default function DrilldownModal({ kpi, open, onClose }: Props) {
   if (!open || !kpi) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-      <div className="bg-white w-full max-w-sm rounded-lg shadow-lg p-6 animate-fade-in relative">
+      <div className="bg-card w-full max-w-sm rounded-lg shadow-lg p-6 animate-fade-in relative">
         <button
           className="absolute top-3 right-3 text-muted-foreground"
           onClick={onClose}

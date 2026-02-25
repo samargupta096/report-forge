@@ -479,7 +479,7 @@ export default function ReportGenerator({
                   <type.icon size={16} />
                   <div>
                     <div className="font-medium">{type.label}</div>
-                    <div className="text-xs text-gray-500">{type.description}</div>
+                    <div className="text-xs text-muted-foreground">{type.description}</div>
                   </div>
                 </div>
               </SelectItem>
@@ -577,7 +577,7 @@ export default function ReportGenerator({
             rows={4}
             className="font-mono text-sm"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Write your SQL query. Be careful with data access permissions.
           </p>
         </div>
@@ -595,7 +595,7 @@ export default function ReportGenerator({
     <div className="rounded-xl border shadow-sm p-6 bg-background">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Report Preview</h3>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <FileText size={16} />
           <span>{reportConfig.type}</span>
         </div>
@@ -603,9 +603,9 @@ export default function ReportGenerator({
       
       {/* Sample Data Table */}
       <div className="overflow-auto">
-        <table className="min-w-full border bg-white rounded">
+        <table className="min-w-full border bg-card rounded">
           <thead>
-            <tr className="bg-gray-50">
+            <tr className="bg-muted">
               <th className="px-4 py-2 border-b text-left font-medium">User ID</th>
               <th className="px-4 py-2 border-b text-left font-medium">Name</th>
               <th className="px-4 py-2 border-b text-left font-medium">Email</th>
@@ -640,7 +640,7 @@ export default function ReportGenerator({
       </div>
 
       {/* Preview Footer */}
-      <div className="mt-4 text-xs text-gray-500 flex justify-between">
+      <div className="mt-4 text-xs text-muted-foreground flex justify-between">
         <span>Sample data - actual report will use live data</span>
         <span>Showing {Math.min(previewData.length, reportConfig.parameters.limit || 100)} records</span>
       </div>
@@ -653,8 +653,8 @@ export default function ReportGenerator({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Report Generator</h2>
-          <p className="text-gray-600">Create and customize data reports</p>
+          <h2 className="text-2xl font-bold text-foreground">Report Generator</h2>
+          <p className="text-muted-foreground">Create and customize data reports</p>
         </div>
         
         {/* Template Selector */}
@@ -685,7 +685,7 @@ export default function ReportGenerator({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Report Configuration */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-card rounded-lg shadow-sm p-6">
               <h3 className="font-semibold mb-4">Report Configuration</h3>
               
               {renderReportTypeSelector()}
@@ -714,7 +714,7 @@ export default function ReportGenerator({
             </div>
 
             {/* Advanced Options */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-card rounded-lg shadow-sm p-6">
               <button
                 type="button"
                 onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}

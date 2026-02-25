@@ -44,7 +44,7 @@ export default function AuditLogsPage() {
         Track changes, access, and activity. 
         <span className="italic ml-2 text-muted-foreground">(Detailed audit log table coming soon!)</span>
       </p>
-      <div className="rounded bg-white p-5 shadow-sm">
+      <div className="rounded bg-card p-5 shadow-sm">
         <Table>
           <TableHeader>
             <TableRow>

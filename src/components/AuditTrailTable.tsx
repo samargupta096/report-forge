@@ -15,7 +15,7 @@ type Props = {
 
 export default function AuditTrailTable({ audits }: Props) {
   return (
-    <div className="overflow-x-auto bg-white border rounded p-3 shadow mb-6">
+    <div className="overflow-x-auto bg-card border rounded p-3 shadow mb-6">
       <h4 className="font-semibold mb-2">Audit Trail</h4>
       <table className="min-w-full text-xs">
         <thead>

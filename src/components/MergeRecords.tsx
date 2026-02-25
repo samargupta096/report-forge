@@ -51,7 +51,7 @@ export default function MergeRecords() {
           Merge Selected
         </Button>
       </div>
-      <div className="overflow-auto rounded-xl border shadow-sm bg-white">
+      <div className="overflow-auto rounded-xl border shadow-sm bg-card">
         <table className="min-w-full">
           <thead>
             <tr>

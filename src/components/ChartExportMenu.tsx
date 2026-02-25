@@ -115,7 +115,7 @@ const ChartExportMenu: React.FC<ChartExportMenuProps> = ({ chartType, chartTitle
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-white z-50 border shadow-lg min-w-[160px]"
+        className="bg-card z-50 border shadow-lg min-w-[160px]"
         sideOffset={6}
       >
         <DropdownMenuItem onClick={handleExportXLSX}>

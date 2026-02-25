@@ -43,7 +43,7 @@ export default function UsersPage() {
       <h2 className="text-2xl font-bold mb-4">Users Management</h2>
       <p className="mb-6">Create and manage your organization's users.</p>
       
-      <div className="max-w-lg w-full bg-white dark:bg-background rounded-xl shadow p-6 flex flex-col items-center">
+      <div className="max-w-lg w-full bg-card dark:bg-background rounded-xl shadow p-6 flex flex-col items-center">
         <h3 className="text-xl font-bold mb-4">Create User (Demo)</h3>
         <form onSubmit={handleAddUser} className="w-full space-y-3">
           <div>

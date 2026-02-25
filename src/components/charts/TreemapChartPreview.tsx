@@ -29,7 +29,7 @@ export default function TreemapChartPreview() {
               if (!payload || !payload[0]) return null;
               const { name, size } = payload[0].payload;
               return (
-                <div className="bg-white border border-gray-200 px-2 py-1 rounded shadow-md text-xs">
+                <div className="bg-card border border-border px-2 py-1 rounded shadow-md text-xs">
                   <b>{name}</b>: {size}
                 </div>
               );

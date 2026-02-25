@@ -39,7 +39,7 @@ export default function ReportFolders() {
           <li className="italic text-muted-foreground">No folders created yet.</li>
         )}
         {folders.map(f => (
-          <li key={f.id} className="flex justify-between items-center bg-white rounded p-2 border">
+          <li key={f.id} className="flex justify-between items-center bg-card rounded p-2 border">
             <span>{f.name}</span>
             <Button
               size="icon" variant="outline"

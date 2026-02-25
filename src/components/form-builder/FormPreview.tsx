@@ -27,11 +27,11 @@ interface FormPreviewProps {
 
 export default function FormPreview({ form }: FormPreviewProps) {
   return (
-    <div className="space-y-6 p-6 bg-white border rounded-lg">
+    <div className="space-y-6 p-6 bg-card border rounded-lg">
       <div>
         <h2 className="text-2xl font-bold">{form.title}</h2>
         {form.description && (
-          <p className="text-gray-600 mt-2">{form.description}</p>
+          <p className="text-muted-foreground mt-2">{form.description}</p>
         )}
       </div>
 
@@ -76,7 +76,7 @@ export default function FormPreview({ form }: FormPreviewProps) {
             )}
             
             {field.helpText && (
-              <p className="text-sm text-gray-500">{field.helpText}</p>
+              <p className="text-sm text-muted-foreground">{field.helpText}</p>
             )}
           </div>
         ))}

@@ -1,0 +1,2 @@
+import{u as p,w as l}from"./xlsx-DAjWcioG.js";function d(c,o,a){const r=[o.join(","),...c.map(n=>o.map(s=>{const i=s.toLowerCase().replace(/ /g,"");return JSON.stringify(n[i]??"")}).join(","))].join(`
+`),e=new Blob([r],{type:"text/csv"}),t=document.createElement("a");t.href=URL.createObjectURL(e),t.download=a,t.click()}function m(c,o,a){const w=c.map(t=>{const n={};return o.forEach(s=>{const i=s.toLowerCase().replace(/ /g,"");n[s]=t[i]??""}),n}),r=p.json_to_sheet(w,{header:o}),e=p.book_new();p.book_append_sheet(e,r,"Report"),l(e,a)}export{m as a,d};

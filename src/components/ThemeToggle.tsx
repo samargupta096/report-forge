@@ -21,7 +21,7 @@ export default function ThemeToggle() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="rounded-full"
     >
-      {isDark ? <ToggleRight className="text-yellow-300" /> : <ToggleLeft className="text-gray-800" />}
+      {isDark ? <ToggleRight className="text-yellow-300" /> : <ToggleLeft className="text-foreground" />}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

@@ -86,19 +86,19 @@ export default function FieldTypeSelector({ onAddField, readOnly }: FieldTypeSel
             variant="outline"
             size="sm"
             onClick={() => onAddField(type)}
-            className="flex flex-col items-start h-auto w-full p-3 text-left hover:bg-gray-50 transition-colors duration-200 whitespace-normal"
+            className="flex flex-col items-start h-auto w-full p-3 text-left hover:bg-muted transition-colors duration-200 whitespace-normal"
             disabled={readOnly}
             title={description}
             aria-label={`Add ${label} field`}
           >
             {/* Icon and Label Row */}
             <div className="flex items-center gap-2 mb-1 w-full">
-              <Icon size={16} className="text-gray-600 shrink-0" />
+              <Icon size={16} className="text-muted-foreground shrink-0" />
               <span className="text-xs font-medium">{label}</span>
             </div>
             
             {/* Description */}
-            <span className="text-xs text-gray-500 text-left leading-tight line-clamp-2">
+            <span className="text-xs text-muted-foreground text-left leading-tight line-clamp-2">
               {description}
             </span>
           </Button>
@@ -107,7 +107,7 @@ export default function FieldTypeSelector({ onAddField, readOnly }: FieldTypeSel
       
       {/* Read-only Notice */}
       {readOnly && (
-        <div className="text-xs text-gray-500 italic mt-2">
+        <div className="text-xs text-muted-foreground italic mt-2">
           Form is in read-only mode. Field addition is disabled.
         </div>
       )}

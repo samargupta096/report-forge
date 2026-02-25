@@ -36,7 +36,7 @@ const SignUpPage = () => {
 
   return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-gradient-to-br from-purple-100 via-blue-100 to-cyan-100 dark:from-[#22263c] dark:via-[#33314e] dark:to-[#10313f] transition-colors duration-500 p-4">
-      <div className="mx-auto max-w-md w-full flex flex-col items-center bg-white dark:bg-background rounded-lg shadow-md p-8">
+      <div className="mx-auto max-w-md w-full flex flex-col items-center bg-card dark:bg-background rounded-lg shadow-md p-8">
         {/* Avatar Upload */}
         <div className="flex flex-col items-center mb-4 w-full">
           <div className="relative mb-2">

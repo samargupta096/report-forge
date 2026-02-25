@@ -12,8 +12,9 @@ import DrilldownModal from "@/components/DrilldownModal";
 import AuditTrailTable, { Audit } from "@/components/AuditTrailTable";
 import AuditTrailModal from "@/components/AuditTrailModal";
 import { useSearchParams } from "react-router-dom";
-import { Plus, Trash2, History } from "lucide-react";
+import { Plus, Trash2, History, Download } from "lucide-react";
 import AddChartDialog from "@/components/AddChartDialog";
+import html2canvas from "html2canvas";
 // import { useToast } from "@/hooks/use-toast";
 
 // KPIs and Charts are now fetched dynamically from JSON files
@@ -144,6 +145,29 @@ export default function DashboardHome() {
     console.log("Resetting date filter for charts.");
   };
 
+  const handleExportDashboard = async () => {
+    const dashboardElement = document.getElementById("dashboard-content");
+    if (!dashboardElement) return;
+
+    try {
+      const canvas = await html2canvas(dashboardElement, {
+        backgroundColor: document.documentElement.classList.contains("dark") || document.documentElement.classList.contains("dracula") || document.documentElement.classList.contains("dim") ? "#111827" : "#ffffff",
+        useCORS: true,
+        scale: 2,
+      });
+
+      const image = canvas.toDataURL("image/png", 1.0);
+      const link = document.createElement("a");
+      link.download = `Dashboard-${selectedDashboard}-${new Date().toISOString().split("T")[0]}.png`;
+      link.href = image;
+      link.click();
+      
+      addAudit("Exported Dashboard", selectedDashboard);
+    } catch (err) {
+      console.error("Failed to export dashboard:", err);
+    }
+  };
+
   // Combine original JSON-loaded charts with custom added ones
   const dashboardCharts = [...baseCharts, ...customCharts];
 
@@ -206,7 +230,7 @@ export default function DashboardHome() {
 
 
   return (
-    <section>
+    <section id="dashboard-content" className="relative p-2 rounded-xl bg-background/50">
       {/* Remove Role Switcher */}
       <div className="flex gap-5 items-center justify-between flex-wrap mb-2 mt-2">
         {/* RoleSwitcher removed */}
@@ -230,7 +254,7 @@ export default function DashboardHome() {
           </Select>
           <button 
             onClick={() => setShowAuditModal(true)}
-            className="flex items-center justify-center p-2 rounded border bg-white text-muted-foreground hover:text-primary hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center justify-center p-2 rounded border bg-card text-muted-foreground hover:text-primary hover:bg-muted transition-colors shadow-sm"
             title="View Audit Trail"
           >
             <History className="w-5 h-5" />
@@ -283,12 +307,21 @@ export default function DashboardHome() {
       <div>
         <div className="flex items-center justify-between mb-4 mt-2">
           <h3 className="text-lg font-semibold">{selectedDashboard} Visualizations</h3>
-          <button
-            onClick={() => setShowAddChart(true)}
-            className="flex items-center gap-1 bg-primary text-primary-foreground text-sm px-3 py-1.5 rounded hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="w-4 h-4" /> Add Widget
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportDashboard}
+              className="flex items-center gap-1 bg-secondary text-secondary-foreground text-sm px-3 py-1.5 rounded hover:bg-secondary/90 transition-colors border shadow-sm"
+              title="Export Dashboard as Image"
+            >
+              <Download className="w-4 h-4" /> Export
+            </button>
+            <button
+              onClick={() => setShowAddChart(true)}
+              className="flex items-center gap-1 bg-primary text-primary-foreground text-sm px-3 py-1.5 rounded hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              <Plus className="w-4 h-4" /> Add Widget
+            </button>
+          </div>
         </div>
         <div
           className="
@@ -305,7 +338,7 @@ export default function DashboardHome() {
                 id={chartId}
                 className="
                   flex flex-col relative
-                  rounded border bg-white shadow-sm p-3 h-full
+                  rounded border bg-card shadow-sm p-3 h-full
                   min-w-[220px] max-w-full
                   w-full
                   md:w-auto

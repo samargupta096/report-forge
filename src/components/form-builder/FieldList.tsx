@@ -83,7 +83,7 @@ export default function FieldList({
    */
   if (fields.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-muted-foreground">
         <FileText size={48} className="mx-auto mb-4 opacity-50" />
         <p className="text-base font-medium mb-2">No fields added yet</p>
         <p className="text-sm">Choose a field type from the left panel to get started</p>
@@ -103,7 +103,7 @@ export default function FieldList({
           className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${
             selectedFieldId === field.id 
               ? 'border-blue-500 bg-blue-50 shadow-sm' 
-              : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+              : 'border-border hover:border-gray-300 hover:shadow-sm'
           }`}
           onClick={() => onSelectField(field.id)}
           role="listitem"
@@ -124,19 +124,19 @@ export default function FieldList({
                 <div title="Drag to reorder (coming soon)">
                   <Move 
                     size={16} 
-                    className="text-gray-400 hover:text-gray-600 transition-colors" 
+                    className="text-gray-400 hover:text-muted-foreground transition-colors" 
                   />
                 </div>
               </div>
               
               {/* Field Details */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 mb-2 truncate">
+                <h4 className="font-medium text-foreground mb-2 truncate">
                   {field.label || `Untitled ${field.type} field`}
                 </h4>
                 
                 <div className="flex flex-wrap items-center gap-2 text-sm mb-2">
-                  <span className="capitalize bg-gray-100 px-2 py-1 rounded text-xs text-gray-700">
+                  <span className="capitalize bg-muted px-2 py-1 rounded text-xs text-gray-700">
                     {field.type} field
                   </span>
                   
@@ -157,7 +157,7 @@ export default function FieldList({
                 
                 {/* Help Text Preview */}
                 {field.helpText && (
-                  <p className="text-xs text-gray-600 truncate mb-2">
+                  <p className="text-xs text-muted-foreground truncate mb-2">
                     {field.helpText}
                   </p>
                 )}
@@ -204,7 +204,7 @@ export default function FieldList({
       ))}
       
       {/* Summary Information */}
-      <div className="text-xs text-gray-500 text-center pt-4 border-t mt-4">
+      <div className="text-xs text-muted-foreground text-center pt-4 border-t mt-4">
         {fields.length} field{fields.length !== 1 ? 's' : ''} • 
         {fields.filter(f => f.required).length} required
       </div>

@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import UserAvatarMenu from "@/components/UserAvatarMenu";
+import { CommandPalette } from "../components/CommandPalette";
+import { AIAssistantWidget } from "../components/AIAssistantWidget";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -55,6 +57,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <main className="flex-1 p-2 sm:p-4 md:p-6 min-w-0 overflow-x-auto">{children}</main>
         </div>
       </div>
+      <CommandPalette />
+      <AIAssistantWidget />
     </SidebarProvider>
   );
 }

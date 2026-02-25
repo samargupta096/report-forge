@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 
 export default function McpServerPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10 bg-white border rounded shadow space-y-6">
+    <div className="max-w-3xl mx-auto px-4 py-10 bg-card border rounded shadow space-y-6">
       <div className="flex items-center gap-2 mb-4">
         <ServerCog size={26} className="text-primary" />
         <h1 className="text-2xl font-bold">MCP Server APIs</h1>
       </div>
-      <p className="mb-8 text-gray-600">
+      <p className="mb-8 text-muted-foreground">
         This page will serve as the hub for your MCP dashboard and report API integrations.
         <br />
         Below are entry points to add tools, documentation, or server configuration for your backend APIs.
